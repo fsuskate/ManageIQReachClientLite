@@ -1,25 +1,26 @@
 import React from 'react';
-import logo from './logo.svg';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { Security } from '@okta/okta-react';
+
+import Navigation from './components/Navigation'
+import Routes from './Routes';
+
 import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Security issuer='https://dev-926285.okta.com/'
+                redirectUri = 'http://localhost:8080/implicit/callback'
+                clientId = '0oa29myzv8HAb1XO3357'>
+        <div className="App">
+          <div className="App-header">
+            <Navigation />
+          </div>        
+          <Routes />
+        </div>  
+      </Security>
+    </Router>    
   );
 }
 
