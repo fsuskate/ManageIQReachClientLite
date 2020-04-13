@@ -13,10 +13,10 @@ class Auth {
         fetch("https://miq-db-12.lvn.broadcom.net/api/auth", requestOptions)
             .then(response => response.json())
             .then(result => {
-            console.log(result)
-            if (result) {
-                callback(result)          
-            }        
+                console.log(result)
+                if (result) {
+                    callback(result)          
+                }        
             })
         .catch(error => console.log('error', error));
     }
