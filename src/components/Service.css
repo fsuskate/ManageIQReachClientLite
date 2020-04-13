@@ -1,0 +1,15 @@
+.Service .lander 
+{
+  padding: 80px 0;
+  text-align: center;
+}
+  
+.Service .lander h1 
+{
+  font-weight: 600;
+}
+
+.Service .lander p 
+{
+  color: #999;
+}

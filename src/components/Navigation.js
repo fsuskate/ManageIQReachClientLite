@@ -9,7 +9,7 @@ class Navigation extends React.Component {
         <LinkContainer to="./">
           <Navbar.Brand>
             <img src="logo.jpg" width='30' className="d-inline-block align-top" alt=""></img>     
-            Broardcom Cloud Portal
+            Broadcom Cloud Portal
           </Navbar.Brand>
         </LinkContainer>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
@@ -19,8 +19,8 @@ class Navigation extends React.Component {
               <LinkContainer to="/catalog">
                   <Nav.Link>Catalog</Nav.Link>      
               </LinkContainer>
-              <LinkContainer to="/instances">
-                  <Nav.Link>VMs</Nav.Link>      
+              <LinkContainer to="/">
+                  <Nav.Link>Instances</Nav.Link>      
               </LinkContainer>                            
             </Nav>                    
           </Nav>

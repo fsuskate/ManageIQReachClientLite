@@ -1,8 +1,9 @@
 import React from "react";
-import "./Home.css";
+import "./Catalog.css";
 import Clock from "./Clock";
+import Auth from "./Authenticate";
 
-class Home extends React.Component {
+class Catalog extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -11,34 +12,7 @@ class Home extends React.Component {
     }
   }
 
-  authenticate() {
-    console.log("authenticate")
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", "Basic ZnM3MzA1MDY6RnJhbmNvaXMyMyE=");
-
-    var requestOptions = {
-      method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow'
-    };
-
-    fetch("https://miq-db-12.lvn.broadcom.net/api/auth", requestOptions)
-      .then(response => response.json())
-      .then(result => {
-        console.log(result)
-        if (result) {
-          this.setState({token : result.auth_token}, () => { 
-            console.log(this.state)
-            if (this.state.token) {
-              this.getServices()
-            }
-          })
-        }        
-      })
-      .catch(error => console.log('error', error));
-  }
-
-  getServices() {
+  getCatalogs() {
     var myHeaders = new Headers();
     myHeaders.append("X-Auth-Token", this.state.token);
 
@@ -48,7 +22,7 @@ class Home extends React.Component {
       redirect: 'follow'
     };
 
-    fetch("https://miq-db-12.lvn.broadcom.net/api/services?expand=resources", requestOptions)
+    fetch("https://miq-db-12.lvn.broadcom.net/api/service_catalogs?expand=resources", requestOptions)
       .then(response => response.json())
       .then(result => {
         console.log(result)
@@ -61,7 +35,15 @@ class Home extends React.Component {
 
   componentDidMount() {
     console.log("componentDidMount")
-    this.authenticate()
+    // Call static function authenticate passing in a callback that sets the token and gets the catalogs
+    Auth.authenticate((data) => {
+      this.setState({token : data.auth_token}, () => { 
+        console.log(this.state)
+        if (this.state.token) {
+          this.getCatalogs()          
+        }
+      })
+    })
   }
 
   render() {    
@@ -87,13 +69,7 @@ class Home extends React.Component {
           <h6 className="card-subtitle mb-2 text-muted">Id: {resource.id}</h6>  
           <h6 className="card-subtitle mb-2 text-muted">Description: {resource.description}</h6>  
           <h6 className="card-subtitle mb-2 text-muted">Service Template: {resource.service_template_id}</h6>            
-          <h6 className="card-subtitle mb-2 text-muted" style={{"font-size": "70%"}}>
-            Actions: 
-              {resource.actions.map((action, index) => 
-                { 
-                  return <li key={action.method+action.name+action.href}><a href={action.href}>{action.name}</a></li> })
-                }
-          </h6>            
+          
         </div>
     </div>);
     });
@@ -106,4 +82,4 @@ class Home extends React.Component {
   }
 }
 
-export default Home;
+export default Catalog;
