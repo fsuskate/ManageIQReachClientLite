@@ -39,14 +39,11 @@ class Login extends React.Component {
       <div className="Login">
         <Form onSubmit={this.handleSubmit}>
           <Form.Group controlId="formBasicEmail">
-          <Form.Label>Email address</Form.Label>
+          <Form.Label>Okta Id</Form.Label>
           <Form.Control type="email" 
             placeholder="Enter email" 
             value={this.state.email} 
             onChange={e => this.setEmail(e.target.value)} />
-          <Form.Text className="text-muted">
-            We'll never share your email with anyone else.
-          </Form.Text>
           </Form.Group>
       
           <Form.Group controlId="formBasicPassword">
