@@ -7,7 +7,7 @@ class Navigation extends React.Component {
   render() {
     return (
       <Navbar variant="dark" className=''>
-        <LinkContainer to="./">
+        <LinkContainer to="./service">
           <Navbar.Brand>
             <img src="logo.jpg" width='30' className="d-inline-block align-top" alt=""></img>     
             Broadcom Cloud Portal
@@ -17,7 +17,7 @@ class Navigation extends React.Component {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto">
             <Nav>
-              <LinkContainer to="/">
+              <LinkContainer to="/service">
                   <Nav.Link>My Services</Nav.Link>      
               </LinkContainer>                            
               <LinkContainer to="/catalog">

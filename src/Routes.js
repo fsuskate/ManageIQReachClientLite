@@ -11,7 +11,7 @@ class Routes extends React.Component {
   render() {
     return (
       <Switch>
-        <Route path='/' exact component={Service} />
+        <Route path='/service' exact component={Service} />
         <Route path='/catalog' exact component={Catalog} />
         <SecureRoute path='/login' component={Login} />
         <Route path="/implicit/callback" component={ImplicitCallback} />
