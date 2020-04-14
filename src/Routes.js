@@ -1,6 +1,5 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { SecureRoute, ImplicitCallback } from '@okta/okta-react';
 
 import Service from './components/Service';
 import Catalog from './components/Catalog';
@@ -13,8 +12,7 @@ class Routes extends React.Component {
       <Switch>
         <Route path='/service' exact component={Service} />
         <Route path='/catalog' exact component={Catalog} />
-        <SecureRoute path='/login' component={Login} />
-        <Route path="/implicit/callback" component={ImplicitCallback} />
+        <Route path='/login' component={Login} />
         <Route component={NotFound} />
       </Switch>
     );
