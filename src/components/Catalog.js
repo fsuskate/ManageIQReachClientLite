@@ -106,14 +106,11 @@ class Catalog extends React.Component {
         <div className="card mx-auto" style={{"margin" : "8px"}} key={catalog.id}>
           <div className="card-header"><b>{catalog.name}</b></div>
           <div className="card-body">          
-            <h6 className="card-subtitle mb-2 text-muted">Id: {catalog.id}</h6>  
-            <h6 className="card-subtitle mb-2 text-muted">Description: {catalog.description}</h6>  
-            <h6 className="card-subtitle mb-2 text-muted">Tenant Id: {catalog.tenant_id}</h6>      
-            <h6 className="card-subtitle mb-2 text-muted" style={{"fontSize": "80%"}}>
+            <h6 className="card-subtitle mb-2 text-muted" style={{"fontSize": "100%"}}>
               <ul className="list-group">
                 {
                   templatesToCatalog[catalog.id].map((template, index) => { 
-                    return <li className="list-group-item" key={template.guid}><a href={template.href}>{template.name}</a></li>
+                    return <li className="list-group-item" key={template.guid}>{template.name}</li>
                   }) 
                 }
               </ul>
