@@ -2,6 +2,7 @@ import React from "react";
 import "./Catalog.css";
 import Clock from "./Clock";
 import Auth from "../services/Authenticate";
+import CatalogService from "../services/CatalogService";
 
 class Catalog extends React.Component {
   constructor() {
@@ -13,64 +14,7 @@ class Catalog extends React.Component {
       loading : true
     }
   }
-
-  getCatalogs() {
-    var myHeaders = new Headers();
-    myHeaders.append("X-Auth-Token", this.state.token);
-    console.log(myHeaders)
-
-    var requestOptions = {
-      method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow'
-    };
-
-    fetch("https://miq-db-12.lvn.broadcom.net/api/service_catalogs?expand=resources", requestOptions)
-      .then(response => response.json())
-      .then(result => {
-        console.log(result)
-        this.setState( {catalogs: result.resources}, () => {
-          this.state.catalogs.forEach((catalog) => {
-            this.getCatalogTemplates(catalog.id)            
-          })
-        })
-      })
-      .catch(error => console.log('error', error));
-  }
-
-  getCatalogTemplates(catalogId) {
-    console.log("getCatalogTemplates for " + catalogId)
-    var myHeaders = new Headers();
-    console.log(myHeaders)
-    myHeaders.append("X-Auth-Token", this.state.token);
-
-    var requestOptions = {
-      method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow'
-    };
-
-    var url = "https://miq-db-12.lvn.broadcom.net/api/service_catalogs/" + catalogId + "/service_templates?expand=resources"
-    console.log(url)
-    fetch(url, requestOptions)
-      .then(response => response.json())
-      .then(result => {
-        console.log(result)
-        var templatesToCatalog = this.state.templatesToCatalog
-        templatesToCatalog[catalogId] = []
-        this.setState( {templatesToCatalog: templatesToCatalog}, () => {
-          result.resources.forEach((template) => {             
-            templatesToCatalog[catalogId].push(template)
-          })        
-        })        
-        this.setState( {templatesToCatalog: templatesToCatalog} )
-        if (Object.keys(templatesToCatalog).length === this.state.catalogs.length) {
-          this.setState({loading: false})
-        }
-      })
-      .catch(error => console.log('error', error));
-  }
-
+  
   componentDidMount() {
     console.log("componentDidMount")
     // Call static function authenticate passing in a callback that sets the token and gets the catalogs
@@ -78,7 +22,27 @@ class Catalog extends React.Component {
       this.setState({token : data.auth_token}, () => { 
         console.log(this.state)
         if (this.state.token) {
-          this.getCatalogs()          
+          CatalogService.getCatalogs(this.state.token, (result) => {
+            console.log(result)
+            this.setState( {catalogs: result.resources}, () => {
+              this.state.catalogs.forEach((catalog) => {
+                CatalogService.getCatalogTemplates(this.state.token, catalog.id, (result) => {
+                  console.log(result)
+                  var templatesToCatalog = this.state.templatesToCatalog
+                  templatesToCatalog[catalog.id] = []
+                  this.setState( {templatesToCatalog: templatesToCatalog}, () => {
+                      result.resources.forEach((template) => {             
+                      templatesToCatalog[catalog.id].push(template)
+                    })        
+                  })        
+                  this.setState( {templatesToCatalog: templatesToCatalog} )
+                  if (Object.keys(templatesToCatalog).length === this.state.catalogs.length) {
+                    this.setState({loading: false})
+                  }
+                })            
+              })
+            })
+          })          
         }
       })
     })
