@@ -8,14 +8,16 @@ class Catalog extends React.Component {
     super();
     this.state = {
       catalogs : "",
-      templatesToCatalog : "",
-      token : ""
+      templatesToCatalog : {},
+      token : "",
+      loading : true
     }
   }
 
   getCatalogs() {
     var myHeaders = new Headers();
     myHeaders.append("X-Auth-Token", this.state.token);
+    console.log(myHeaders)
 
     var requestOptions = {
       method: 'GET',
@@ -29,7 +31,7 @@ class Catalog extends React.Component {
         console.log(result)
         this.setState( {catalogs: result.resources}, () => {
           this.state.catalogs.forEach((catalog) => {
-            this.getCatalogTemplates(catalog.id)
+            this.getCatalogTemplates(catalog.id)            
           })
         })
       })
@@ -37,8 +39,9 @@ class Catalog extends React.Component {
   }
 
   getCatalogTemplates(catalogId) {
-    console.log("getCatalogTemplates")
+    console.log("getCatalogTemplates for " + catalogId)
     var myHeaders = new Headers();
+    console.log(myHeaders)
     myHeaders.append("X-Auth-Token", this.state.token);
 
     var requestOptions = {
@@ -53,16 +56,17 @@ class Catalog extends React.Component {
       .then(response => response.json())
       .then(result => {
         console.log(result)
-        var templatesToCatalog = {}
-        this.state.catalogs.map((catalog, index) => {
-          var template = result.resources.map((template, index) => { 
-            return template.service_template_catalog_id === catalog.id ? template : null
-          })
-          console.log("catalog id: " + catalog.id + " template: " + template)
-          templatesToCatalog[catalog.id] = template
+        var templatesToCatalog = this.state.templatesToCatalog
+        templatesToCatalog[catalogId] = []
+        this.setState( {templatesToCatalog: templatesToCatalog}, () => {
+          result.resources.forEach((template) => {             
+            templatesToCatalog[catalogId].push(template)
+          })        
         })        
-      
-        this.setState( {templatesToCatalog: templatesToCatalog})
+        this.setState( {templatesToCatalog: templatesToCatalog} )
+        if (Object.keys(templatesToCatalog).length === this.state.catalogs.length) {
+          this.setState({loading: false})
+        }
       })
       .catch(error => console.log('error', error));
   }
@@ -81,12 +85,12 @@ class Catalog extends React.Component {
   }
 
   render() {    
-    const {catalogs} = this.state;
-    const {templatesToCatalog} = this.state
+    var catalogs = this.state.catalogs
+    var templatesToCatalog = this.state.templatesToCatalog
     console.log(catalogs)
     console.log(templatesToCatalog)
 
-    if (!catalogs || !templatesToCatalog) {
+    if (this.state.loading) {
       return (
         <div className="Catalog">
           <div className="lander">
@@ -100,20 +104,22 @@ class Catalog extends React.Component {
     const renderedResourcesList = catalogs.map((catalog, index) => {
       return (
         <div className="card mx-auto" style={{"margin" : "8px"}} key={catalog.id}>
-        <div className="card-header"><b>{catalog.name}</b></div>
-        <div className="card-body">          
-          <h6 className="card-subtitle mb-2 text-muted">Id: {catalog.id}</h6>  
-          <h6 className="card-subtitle mb-2 text-muted">Description: {catalog.description}</h6>  
-          <h6 className="card-subtitle mb-2 text-muted">Tenant Id: {catalog.tenant_id}</h6>      
-          <h6 className="card-subtitle mb-2 text-muted" style={{"font-size": "70%"}}>
-            Templates: 
-              {templatesToCatalog[catalog.id].map((template, index) => 
-                { 
-                  return template != null ? <li key={template.guid}><a href={template.href}>{template.name}</a></li> : null }) 
+          <div className="card-header"><b>{catalog.name}</b></div>
+          <div className="card-body">          
+            <h6 className="card-subtitle mb-2 text-muted">Id: {catalog.id}</h6>  
+            <h6 className="card-subtitle mb-2 text-muted">Description: {catalog.description}</h6>  
+            <h6 className="card-subtitle mb-2 text-muted">Tenant Id: {catalog.tenant_id}</h6>      
+            <h6 className="card-subtitle mb-2 text-muted" style={{"fontSize": "80%"}}>
+              <ul className="list-group">
+                {
+                  templatesToCatalog[catalog.id].map((template, index) => { 
+                    return <li className="list-group-item" key={template.guid}><a href={template.href}>{template.name}</a></li>
+                  }) 
                 }
-          </h6>  
-        </div>
-    </div>);
+              </ul>
+            </h6>  
+          </div>
+        </div>);
     });
 
     return (
