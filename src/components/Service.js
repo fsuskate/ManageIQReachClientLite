@@ -1,7 +1,8 @@
 import React from "react";
 import "./Service.css";
 import Clock from "./Clock";
-import Auth from "./Authenticate";
+import Auth from "../services/Authenticate";
+import ServicesService from "../services/ServicesService";
 
 class Service extends React.Component {
   constructor() {
@@ -12,27 +13,6 @@ class Service extends React.Component {
     }
   }
 
-  getServices() {
-    var myHeaders = new Headers();
-    myHeaders.append("X-Auth-Token", this.state.token);
-
-    var requestOptions = {
-      method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow'
-    };
-
-    fetch("https://miq-db-12.lvn.broadcom.net/api/services?expand=resources", requestOptions)
-      .then(response => response.json())
-      .then(result => {
-        console.log(result)
-        console.log(result.resources)
-        console.log(result.resources[0])
-        this.setState( {resources: result.resources})
-      })
-      .catch(error => console.log('error', error));
-  }
-
   componentDidMount() {
     console.log("componentDidMount")
     // Call static function authenticate passing in a callback that sets the token and gets the catalogs
@@ -40,7 +20,9 @@ class Service extends React.Component {
       this.setState({token : data.auth_token}, () => { 
         console.log(this.state)
         if (this.state.token) {
-          this.getServices()          
+          ServicesService.getServices(this.state.token, (result) => {
+            this.setState( {resources: result.resources})
+          })
         }
       })
     })

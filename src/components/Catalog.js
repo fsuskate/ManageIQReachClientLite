@@ -1,7 +1,7 @@
 import React from "react";
 import "./Catalog.css";
 import Clock from "./Clock";
-import Auth from "./Authenticate";
+import Auth from "../services/Authenticate";
 
 class Catalog extends React.Component {
   constructor() {
