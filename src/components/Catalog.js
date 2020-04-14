@@ -1,54 +1,54 @@
 import React from "react";
 import "./Catalog.css";
 import Clock from "./Clock";
-import Auth from "../services/Authenticate";
+import AuthService from "../services/AuthService";
 import CatalogService from "../services/CatalogService";
 
 class Catalog extends React.Component {
   constructor() {
     super();
     this.state = {
-      catalogs : "",
-      templatesToCatalog : {},
-      token : "",
-      loading : true
+      catalogs: "",
+      templatesToCatalog: {},
+      token: "",
+      loading: true
     }
   }
-  
+
   componentDidMount() {
     console.log("componentDidMount")
     // Call static function authenticate passing in a callback that sets the token and gets the catalogs
-    Auth.authenticate((data) => {
-      this.setState({token : data.auth_token}, () => { 
+    AuthService.authenticate((data) => {
+      this.setState({ token: data.auth_token }, () => {
         console.log(this.state)
         if (this.state.token) {
           CatalogService.getCatalogs(this.state.token, (result) => {
             console.log(result)
-            this.setState( {catalogs: result.resources}, () => {
+            this.setState({ catalogs: result.resources }, () => {
               this.state.catalogs.forEach((catalog) => {
                 CatalogService.getCatalogTemplates(this.state.token, catalog.id, (result) => {
                   console.log(result)
                   var templatesToCatalog = this.state.templatesToCatalog
                   templatesToCatalog[catalog.id] = []
-                  this.setState( {templatesToCatalog: templatesToCatalog}, () => {
-                      result.resources.forEach((template) => {             
+                  this.setState({ templatesToCatalog: templatesToCatalog }, () => {
+                    result.resources.forEach((template) => {
                       templatesToCatalog[catalog.id].push(template)
-                    })        
-                  })        
-                  this.setState( {templatesToCatalog: templatesToCatalog} )
+                    })
+                  })
+                  this.setState({ templatesToCatalog: templatesToCatalog })
                   if (Object.keys(templatesToCatalog).length === this.state.catalogs.length) {
-                    this.setState({loading: false})
+                    this.setState({ loading: false })
                   }
-                })            
+                })
               })
             })
-          })          
+          })
         }
       })
     })
   }
 
-  render() {    
+  render() {
     var catalogs = this.state.catalogs
     var templatesToCatalog = this.state.templatesToCatalog
     console.log(catalogs)
@@ -58,7 +58,7 @@ class Catalog extends React.Component {
       return (
         <div className="Catalog">
           <div className="lander">
-            <h1>Loading</h1>            
+            <h1>Loading</h1>
             <Clock />
           </div>
         </div>
@@ -67,25 +67,25 @@ class Catalog extends React.Component {
 
     const renderedResourcesList = catalogs.map((catalog, index) => {
       return (
-        <div className="card mx-auto" style={{"margin" : "8px"}} key={catalog.id}>
+        <div className="card mx-auto" style={{ "margin": "8px" }} key={catalog.id}>
           <div className="card-header"><b>{catalog.name}</b></div>
-          <div className="card-body">          
-            <h6 className="card-subtitle mb-2 text-muted" style={{"fontSize": "100%"}}>
+          <div className="card-body">
+            <h6 className="card-subtitle mb-2 text-muted" style={{ "fontSize": "100%" }}>
               <ul className="list-group">
                 {
-                  templatesToCatalog[catalog.id].map((template, index) => { 
+                  templatesToCatalog[catalog.id].map((template, index) => {
                     return <li className="list-group-item" key={template.guid}>{template.name}</li>
-                  }) 
+                  })
                 }
               </ul>
-            </h6>  
+            </h6>
           </div>
         </div>);
     });
 
     return (
       <div className="Catalog">
-        {renderedResourcesList}        
+        {renderedResourcesList}
       </div>
     );
   }
