@@ -52,7 +52,7 @@ class Service extends React.Component {
 
     if (!resources) {
       return (
-        <div className="Home">
+        <div className="Service">
           <div className="lander">
             <h1>Loading</h1>            
             <Clock />
@@ -75,7 +75,7 @@ class Service extends React.Component {
     });
 
     return (
-      <div className="Home">
+      <div className="Service">
         {renderedResourcesList}        
       </div>
     );

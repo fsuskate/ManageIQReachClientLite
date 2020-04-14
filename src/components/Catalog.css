@@ -1,15 +1,19 @@
-.Home .lander 
+.Catalog 
 {
-  padding: 80px 0;
-  text-align: center;
+  margin-top: 70px;
 }
   
-.Home .lander h1 
+.Catalog .lander
+{
+  text-align: center;
+}
+
+.Catalog .lander h1 
 {
   font-weight: 600;
 }
 
-.Home .lander p 
+.Catalog .lander p 
 {
   color: #999;
 }
