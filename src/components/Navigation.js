@@ -20,7 +20,7 @@ class Navigation extends React.Component {
                   <Nav.Link>Catalog</Nav.Link>      
               </LinkContainer>
               <LinkContainer to="/">
-                  <Nav.Link>Instances</Nav.Link>      
+                  <Nav.Link>Services</Nav.Link>      
               </LinkContainer>                            
             </Nav>                    
           </Nav>
