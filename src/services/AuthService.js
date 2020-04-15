@@ -7,8 +7,9 @@ class AuthService {
     console.log("authenticate")
     const authToken = UserAuthContext.Provider
     var myHeaders = new Headers();
-    //myHeaders.append("Authorization", "Basic ZnM3MzA1MDY6RnJhbmNvaXMyMyE=");
-    myHeaders.append("Authorization", authToken)
+    // Debug only, remove in release
+    myHeaders.append("Authorization", "Basic ZnM3MzA1MDY6RnJhbmNvaXMyMyE=");
+    //myHeaders.append("Authorization", authToken)
 
     var requestOptions = {
       method: 'GET',
