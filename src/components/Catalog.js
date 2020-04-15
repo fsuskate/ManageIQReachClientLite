@@ -19,41 +19,41 @@ class Catalog extends React.Component {
     console.log("componentDidMount")
     let authService = new AuthService()
     authService.authenticate((data) => {
-      this.setState({ token: data.auth_token }, () => {
-        console.log(this.state)
-        if (this.state.token) {
-          CatalogService.getCatalogs(this.state.token, (result) => {
-            console.log(result)
-            this.setState({ catalogs: result.resources }, () => {
-              this.state.catalogs.forEach((catalog) => {
-                CatalogService.getCatalogTemplates(this.state.token, catalog.id, (result) => {
-                  console.log(result)
-                  var templatesToCatalog = this.state.templatesToCatalog
-                  templatesToCatalog[catalog.id] = []
-                  this.setState({ templatesToCatalog: templatesToCatalog }, () => {
-                    result.resources.forEach((template) => {
-                      templatesToCatalog[catalog.id].push(template)
-                    })
-                  })
-                  this.setState({ templatesToCatalog: templatesToCatalog })
-                  if (Object.keys(templatesToCatalog).length === this.state.catalogs.length) {
-                    this.setState({ loading: false })
-                  }
-                })
-              })
-            })
-          })
-        }
-      })
+      this.setState({ token: data.auth_token }, this.doGetCatalogs)
     })
   }
 
-  render() {
-    var catalogs = this.state.catalogs
-    var templatesToCatalog = this.state.templatesToCatalog
-    console.log(catalogs)
-    console.log(templatesToCatalog)
+  doGetCatalogs() {
+    console.log(this.state)
+    if (this.state.token) {
+      CatalogService.getCatalogs(this.state.token, (result) => {
+        console.log(result)
+        this.setState({ catalogs: result.resources }, this.doGetCatalogTemplates)
+      })
+    }
+  }
 
+  doGetCatalogTemplates() {
+    this.state.catalogs.forEach((catalog) => {
+      CatalogService.getCatalogTemplates(this.state.token, catalog.id, (result) => {
+        console.log(result)
+        var templatesToCatalog = this.state.templatesToCatalog
+        templatesToCatalog[catalog.id] = []
+        this.setState({ templatesToCatalog: templatesToCatalog }, () => {
+          result.resources.forEach((template) => {
+            templatesToCatalog[catalog.id].push(template)
+          })
+        })
+        this.setState({ templatesToCatalog: templatesToCatalog }, () => {
+          if (Object.keys(templatesToCatalog).length === this.state.catalogs.length) {
+            this.setState({ loading: false })
+          }
+        })        
+      })
+    })
+  }  
+
+  render() {
     if (this.state.loading) {
       return (
         <div className="Catalog">
@@ -65,6 +65,11 @@ class Catalog extends React.Component {
       );
     }
 
+    var catalogs = this.state.catalogs
+    var templatesToCatalog = this.state.templatesToCatalog
+    console.log(catalogs)
+    console.log(templatesToCatalog)
+
     const renderedResourcesList = catalogs.map((catalog, index) => {
       return (
         <div className="card mx-auto" style={{ "margin": "8px" }} key={catalog.id}>
@@ -74,7 +79,12 @@ class Catalog extends React.Component {
               <ul className="list-group">
                 {
                   templatesToCatalog[catalog.id].map((template, index) => {
-                    return <li className="list-group-item" key={template.guid}>{template.name}</li>
+                    return <li className="list-group-item" key={template.guid}>
+                      {template.name}
+                      <a role="button" className="btn btn-primary btn-sm float-right" href={`/deploy?templateId=${template.id}`}>
+                        Deploy
+                      </a>
+                    </li>
                   })
                 }
               </ul>
