@@ -32,16 +32,17 @@ class Login extends React.Component {
   handleSubmit(event) {
     event.preventDefault(); 
 
+    // Convert to base 64 Basic auth string
     var auth = 'Basic ' + new Buffer(this.state.username + ':' + this.state.password).toString('base64');
 
-    //alert(auth);
-
-
+    // Set the global basic auth string for use in the AuthService
     UserAuthContext.Provider = auth
 
+    // Authenticate
     let authService = new AuthService()
     authService.authenticate((data) => {
       UserService.getUsers(data.auth_token, this.state.username, (data) => {
+        // Set the user id for use in services
         UserIdContext.Provider = data.resources[0].id
         this.setState({redirectToHome: true})
       })
