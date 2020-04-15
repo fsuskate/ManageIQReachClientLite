@@ -14,7 +14,7 @@ class ServicesService {
     let url = "https://miq-db-12.lvn.broadcom.net/api/services?expand=resources"
 
     let userId = UserIdContext.Provider
-    if (userId) {
+    if (userId && userId.length !== "undefined" && userId.length > 0) {
       url = url + "&filter[]=evm_owner_id=" + userId
     }
 
