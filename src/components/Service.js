@@ -33,7 +33,7 @@ class Service extends React.Component {
   render() {    
     const {resources} = this.state;
     console.log(resources)
-    console.log("userauth: " + UserAuthContext.Provider)
+    console.log("userAuth: " + UserAuthContext.Provider)
 
     if (!resources) {
       return (
@@ -51,7 +51,11 @@ class Service extends React.Component {
         <div className="card mx-auto" style={{"margin" : "8px"}} key={resource.id}>
         <div className="card-header"><b>{resource.name}</b></div>
         <div className="card-body">          
-          <h6 className="card-subtitle mb-2 text-muted">Id: {resource.id}</h6>  
+          <h6 className="card-subtitle mb-2 text-muted">Id: {resource.id}
+            <a role="button" className="btn btn-primary btn-sm float-right" href={`/service_details?serviceId=${resource.id}`}>
+              Details
+            </a>
+          </h6>  
           <h6 className="card-subtitle mb-2 text-muted">Description: {resource.description}</h6>  
           <h6 className="card-subtitle mb-2 text-muted">Service Template: {resource.service_template_id}</h6>            
           
