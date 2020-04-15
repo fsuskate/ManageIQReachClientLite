@@ -25,7 +25,7 @@ class Navigation extends React.Component {
               </LinkContainer>              
             </Nav>                    
           </Nav>
-          <Nav pullright="true">
+          <Nav floatRight="true">
             <LinkContainer to="/login">
               <Nav.Link>Login</Nav.Link>                              
             </LinkContainer>
