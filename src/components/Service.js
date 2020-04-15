@@ -3,6 +3,7 @@ import "./Service.css";
 import Clock from "./Clock";
 import AuthService from "../services/AuthService";
 import ServicesService from "../services/ServicesService";
+import { UserAuthContext } from '../App'
 
 class Service extends React.Component {
   constructor() {
@@ -16,7 +17,8 @@ class Service extends React.Component {
   componentDidMount() {
     console.log("componentDidMount")
     // Call static function authenticate passing in a callback that sets the token and gets the catalogs
-    AuthService.authenticate((data) => {
+    let authService = new AuthService()
+    authService.authenticate((data) => {
       this.setState({token : data.auth_token}, () => { 
         console.log(this.state)
         if (this.state.token) {
@@ -31,6 +33,7 @@ class Service extends React.Component {
   render() {    
     const {resources} = this.state;
     console.log(resources)
+    console.log("userauth: " + UserAuthContext.Provider)
 
     if (!resources) {
       return (

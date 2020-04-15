@@ -5,17 +5,29 @@ import Routes from './Routes';
 
 import './App.css';
 
-function App() {
-  return (
-    <Router>
-      <div className="App">
-        <div className="App-header">
-          <Navigation />
+const UserAuthContext = React.createContext(null)
+const UserNameContext = React.createContext(null)
+const UserIdContext = React.createContext(null)
+
+class App extends React.Component {
+  render() {
+    return (
+      <Router>
+        <div className="App">
+          <div className="App-header">
+            <Navigation />
+          </div>        
+          <Routes />
         </div>        
-        <Routes />
-      </div>        
-    </Router>    
-  );
+      </Router>    
+    );
+  }
 }
 
-export default App;
+export { 
+  App,
+  UserAuthContext,
+  UserNameContext,
+  UserIdContext
+}
+

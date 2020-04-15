@@ -17,8 +17,8 @@ class Catalog extends React.Component {
 
   componentDidMount() {
     console.log("componentDidMount")
-    // Call static function authenticate passing in a callback that sets the token and gets the catalogs
-    AuthService.authenticate((data) => {
+    let authService = new AuthService()
+    authService.authenticate((data) => {
       this.setState({ token: data.auth_token }, () => {
         console.log(this.state)
         if (this.state.token) {

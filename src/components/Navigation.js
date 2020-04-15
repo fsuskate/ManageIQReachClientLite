@@ -7,7 +7,7 @@ class Navigation extends React.Component {
   render() {
     return (
       <Navbar variant="dark" className=''>
-        <LinkContainer to="./service">
+        <LinkContainer to="./login">
           <Navbar.Brand>
             <img src="logo.jpg" width='30' className="d-inline-block align-top" alt=""></img>     
             Broadcom Cloud Portal

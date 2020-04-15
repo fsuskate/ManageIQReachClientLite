@@ -1,55 +1,72 @@
 import React from 'react';
+import { UserAuthContext, UserIdContext } from '../App'
 import { Form, Button } from 'react-bootstrap';
 import "./Login.css";
+import { Redirect } from 'react-router';
+import UserService from '../services/UserService'
+import AuthService from '../services/AuthService'
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "",
-      password: ""
+      username: "",
+      password: "",
+      redirectToHome: false
     };       
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  setEmail(data) {
-    this.setState({
-      email: data
-    });
+  setUsername(data) {
+    this.setState({username: data});
   }
 
   setPassword(data) {
-    this.setState({
-      password: data
-    });
+    this.setState({password: data});
   }
 
   validateForm() {
-    return this.state.email.length > 0 && this.state.password.length > 0;        
+    return this.state.username.length > 0 && this.state.password.length > 0;        
   }
 
   handleSubmit(event) {
     event.preventDefault(); 
 
-    alert("Username: " + this.state.email + "\nPassword: " + this.state.password);
+    var auth = 'Basic ' + new Buffer(this.state.username + ':' + this.state.password).toString('base64');
+
+    //alert(auth);
+
+
+    UserAuthContext.Provider = auth
+
+    let authService = new AuthService()
+    authService.authenticate((data) => {
+      UserService.getUsers(data.auth_token, this.state.username, (data) => {
+        UserIdContext.Provider = data.resources[0].id
+        this.setState({redirectToHome: true})
+      })
+    })
   }
   
   render() {
+    const redirectToHome = this.state.redirectToHome;
+    if (redirectToHome === true) {
+        return <Redirect to="/service" />
+    }
+
     return (
       <div className="Login">
         <Form onSubmit={this.handleSubmit}>
           <Form.Group controlId="formBasicEmail">
           <Form.Label>Okta Id</Form.Label>
-          <Form.Control type="email" 
-            placeholder="Enter email" 
-            value={this.state.email} 
-            onChange={e => this.setEmail(e.target.value)} />
+          <Form.Control 
+            value={this.state.username} 
+            onChange={e => this.setUsername(e.target.value)} />
           </Form.Group>
       
           <Form.Group controlId="formBasicPassword">
           <Form.Label>Password</Form.Label>
-          <Form.Control type="password" 
-            placeholder="Password" 
+          <Form.Control type="password"
             value={this.state.password} 
             onChange={e => this.setPassword(e.target.value)}/>
           </Form.Group>

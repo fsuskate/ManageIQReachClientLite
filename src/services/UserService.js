@@ -1,7 +1,5 @@
-import { UserIdContext } from '../App'
-
-class ServicesService {
-  static getServices(token, callback) {
+class UserService {
+  static getUsers(token, username, callback) {
     var myHeaders = new Headers();
     myHeaders.append("X-Auth-Token", token);
 
@@ -11,11 +9,10 @@ class ServicesService {
       redirect: 'follow'
     };
 
-    let url = "https://miq-db-12.lvn.broadcom.net/api/services?expand=resources"
+    let url = "https://miq-db-12.lvn.broadcom.net/api/users?expand=resources"
 
-    let userId = UserIdContext.Provider
-    if (userId) {
-      url = url + "&filter[]=evm_owner_id=" + userId
+    if (username) {
+      url = url + "&filter[]=userid=" + username + "@broadcom.net"
     }
 
     console.log("url: " + url)
@@ -30,4 +27,4 @@ class ServicesService {
   }
 }
 
-export default ServicesService
+export default UserService
