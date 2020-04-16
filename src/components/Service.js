@@ -3,7 +3,6 @@ import "./Service.css";
 import Clock from "./Clock";
 import AuthService from "../services/AuthService";
 import ServicesService from "../services/ServicesService";
-import { UserAuthContext } from '../App'
 
 class Service extends React.Component {
   constructor() {
@@ -33,8 +32,7 @@ class Service extends React.Component {
   render() {    
     const {resources} = this.state;
     console.log(resources)
-    console.log("userAuth: " + UserAuthContext.Provider)
-
+    
     if (!resources) {
       return (
         <div className="Service">
