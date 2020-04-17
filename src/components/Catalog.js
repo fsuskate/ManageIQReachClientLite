@@ -3,6 +3,7 @@ import "./Catalog.css";
 import Clock from "./Clock";
 import AuthService from "../services/AuthService";
 import CatalogService from "../services/CatalogService";
+import { Button } from 'react-bootstrap'
 
 class Catalog extends React.Component {
   constructor() {
@@ -11,8 +12,9 @@ class Catalog extends React.Component {
       catalogs: "",
       templatesToCatalog: {},
       token: "",
-      loading: true
+      loading: true      
     }
+    this.doProvision = this.doProvision.bind(this)
   }
 
   componentDidMount() {
@@ -21,6 +23,16 @@ class Catalog extends React.Component {
     authService.authenticate((data) => {
       this.setState({ token: data.auth_token }, this.doGetCatalogs)
     })
+  }
+
+  doProvision(id) {
+    alert("Deploy " + id)
+    let authService = new AuthService()
+    authService.authenticate((data) => {
+      CatalogService.postProvisionTemplate(data.auth_token, ()  => {
+        this.setState({redirectToHome: true})
+      })
+    })    
   }
 
   doGetCatalogs() {
@@ -81,9 +93,9 @@ class Catalog extends React.Component {
                   templatesToCatalog[catalog.id].map((template, index) => {
                     return <li className="list-group-item" key={template.guid}>
                       {template.name}
-                      <a role="button" className="btn btn-primary btn-sm float-right" href={`/deploy?templateId=${template.id}`}>
+                      <Button className="btn btn-primary btn-sm float-right" onClick={() => this.doProvision(template.id)}>
                         Deploy
-                      </a>
+                      </Button>
                     </li>
                   })
                 }
