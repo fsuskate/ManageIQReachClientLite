@@ -9,7 +9,7 @@ class UserService {
       redirect: 'follow'
     };
 
-    let url = "https://miq-db-12.lvn.broadcom.net/api/users?expand=resources"
+    let url = "/api/users?expand=resources"
 
     if (username) {
       url = url + "&filter[]=userid=" + username + "@broadcom.net"

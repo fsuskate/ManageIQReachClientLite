@@ -11,7 +11,7 @@ class ServicesService {
       redirect: 'follow'
     };
 
-    let url = "https://miq-db-12.lvn.broadcom.net/api/services?expand=resources"
+    let url = "/api/services?expand=resources"
 
     let userId = UserIdContext.Provider
     if (userId && userId.length !== "undefined" && userId.length > 0) {

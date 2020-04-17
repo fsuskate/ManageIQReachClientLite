@@ -17,7 +17,7 @@ class AuthService {
       redirect: 'follow'
     };
 
-    fetch("https://miq-db-12.lvn.broadcom.net/api/auth", requestOptions)
+    fetch("/api/auth", requestOptions)
       .then(response => response.json())
       .then(result => {
         console.log(result)
