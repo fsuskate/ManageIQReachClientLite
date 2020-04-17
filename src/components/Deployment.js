@@ -1,12 +1,15 @@
-import React from 'react';
-import { Form, Button } from 'react-bootstrap';
-import "./Deployment.css";
-import { Redirect } from 'react-router';
+import React from 'react'
+import { Form, Button } from 'react-bootstrap'
+import "./Deployment.css"
+import { Redirect } from 'react-router'
+import CatalogService from "../services/CatalogService"
+import AuthService from "../services/AuthService"
 
 class Deployment extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      token: "",
       cpu: "",
       memory: "",
       disk: "",
@@ -21,11 +24,24 @@ class Deployment extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault(); 
+    
     alert("Deploying")
-    this.setState({redirectToHome: true})
+
+    let authService = new AuthService()
+    authService.authenticate((data) => {
+      this.setState({ token: data.auth_token }, this.doProvision)
+    })        
+  }
+
+  doProvision() {
+    CatalogService.postProvisionTemplate(this.state.token, ()  => {
+      this.setState({redirectToHome: true})
+    })
   }
 
   componentDidMount() {
+    console.log("componentDidMount")
+  
     let templateId = this.props.location.search
     templateId = templateId.split("=").pop()
     this.setState({templateId: templateId})
