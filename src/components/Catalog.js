@@ -93,9 +93,9 @@ class Catalog extends React.Component {
                   templatesToCatalog[catalog.id].map((template, index) => {
                     return <li className="list-group-item" key={template.guid}>
                       {template.name}
-                      <Button className="btn btn-primary btn-sm float-right" onClick={() => this.doProvision(template.id)}>
+                      <a role="button" className="btn btn-primary btn-sm float-right" href={`/deploy?catalogId=${catalog.id}&templateId=${template.id}`}>
                         Deploy
-                      </Button>
+                      </a>
                     </li>
                   })
                 }
