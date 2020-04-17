@@ -16,6 +16,8 @@ class ServicesService {
     let userId = UserIdContext.Provider
     if (userId && userId.length !== "undefined" && userId.length > 0) {
       url = url + "&filter[]=evm_owner_id=" + userId
+    } else {
+      url = url + "&filter[]=evm_owner_id=12000000000006" // Hardcode to me for now
     }
 
     console.log("url: " + url)

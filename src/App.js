@@ -6,7 +6,6 @@ import Routes from './Routes';
 import './App.css';
 
 const UserAuthContext = React.createContext(null)
-const UserNameContext = React.createContext(null)
 const UserIdContext = React.createContext(null)
 
 class App extends React.Component {
@@ -27,7 +26,6 @@ class App extends React.Component {
 export { 
   App,
   UserAuthContext,
-  UserNameContext,
   UserIdContext
 }
 
