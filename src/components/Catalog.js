@@ -1,9 +1,9 @@
 import React from "react";
 import "./Catalog.css";
-import Clock from "./Clock";
 import AuthService from "../services/AuthService";
 import CatalogService from "../services/CatalogService";
 import { Button } from 'react-bootstrap'
+import Loading from "./Loading";
 
 class Catalog extends React.Component {
   constructor() {
@@ -68,12 +68,7 @@ class Catalog extends React.Component {
   render() {
     if (this.state.loading) {
       return (
-        <div className="Catalog">
-          <div className="lander">
-            <h1>Loading</h1>
-            <Clock />
-          </div>
-        </div>
+        <Loading />
       );
     }
 

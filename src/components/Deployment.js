@@ -5,6 +5,7 @@ import { Redirect } from 'react-router'
 import CatalogService from "../services/CatalogService"
 import AuthService from "../services/AuthService"
 import Clock from "./Clock"
+import Loading from './Loading'
 
 class Deployment extends React.Component {
   constructor(props) {
@@ -76,12 +77,7 @@ class Deployment extends React.Component {
     const template = this.state.template
     if (!template) {
       return (
-        <div className="Deployment">
-          <div className="lander">
-            <h1>Loading</h1>            
-            <Clock />
-          </div>
-        </div>
+        <Loading />
       );
     }
 

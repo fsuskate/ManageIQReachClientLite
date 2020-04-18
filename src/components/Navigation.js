@@ -18,16 +18,16 @@ class Navigation extends React.Component {
           <Nav className="mr-auto">
             <Nav>
               <LinkContainer to="/service">
-                  <Nav.Link>My Services</Nav.Link>      
+                  <Nav.Link>MY SERVICES</Nav.Link>      
               </LinkContainer>                            
               <LinkContainer to="/catalog">
-                  <Nav.Link>Catalog</Nav.Link>      
+                  <Nav.Link>CATALOG</Nav.Link>      
               </LinkContainer>              
             </Nav>                    
           </Nav>
           <Nav floatRight="true">
             <LinkContainer to="/login">
-              <Nav.Link>Login</Nav.Link>                              
+              <Nav.Link>LOGIN</Nav.Link>                              
             </LinkContainer>
           </Nav>
         </Navbar.Collapse>   

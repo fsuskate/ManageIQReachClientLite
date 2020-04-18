@@ -1,6 +1,6 @@
 import React from "react";
 import "./Service.css";
-import Clock from "./Clock";
+import Loading from "./Loading";
 import AuthService from "../services/AuthService";
 import ServicesService from "../services/ServicesService";
 
@@ -35,12 +35,7 @@ class Service extends React.Component {
     
     if (!resources) {
       return (
-        <div className="Service">
-          <div className="lander">
-            <h1>Loading</h1>            
-            <Clock />
-          </div>
-        </div>
+        <Loading />
       );
     }
 
