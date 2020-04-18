@@ -6,7 +6,7 @@ import { Navbar, Nav } from 'react-bootstrap';
 class Navigation extends React.Component {
   render() {
     return (
-      <Navbar variant="dark" className=''>
+      <Navbar variant="dark" className="Nav-header" fixed="top">
         <LinkContainer to="./login">
           <Navbar.Brand>
             <img src="logo.jpg" width='30' className="d-inline-block align-top" alt=""></img>     

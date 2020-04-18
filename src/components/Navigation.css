@@ -1,0 +1,14 @@
+.Nav-header {
+    background-color: #9c2c2c;
+    min-height: 4vh;
+    display: flex;
+    flex-direction: column;
+    font-size: calc(10px + 1vmin);  
+    color: white;
+    top: 0;
+    width: 100%;
+    z-index: 100;    
+    position: fixed;
+  }
+  
+  

@@ -2,27 +2,12 @@
 {
   .Deployment 
   {
-    margin-top: 90px;
+    vertical-align: middle;
   }
 
   .Deployment Form 
   {
     margin: 0 auto;
     max-width: 480px;
-  }
-
-  .Deployment .lander
-  {
-    text-align: center;
-  }
-
-  .Deployment .lander h1 
-  {
-    font-weight: 600;
-  }
-
-  .Deployment .lander p 
-  {
-    color: #999;
   }
 }
