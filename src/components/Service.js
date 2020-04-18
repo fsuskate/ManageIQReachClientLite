@@ -50,8 +50,7 @@ class Service extends React.Component {
             </a>
           </h6>  
           <h6 className="card-subtitle mb-2 text-muted">Description: {resource.description}</h6>  
-          <h6 className="card-subtitle mb-2 text-muted">Service Template: {resource.service_template_id}</h6>            
-          
+          <h6 className="card-subtitle mb-2 text-muted">Service Template: {resource.service_template_id}</h6> 
         </div>
     </div>);
     });

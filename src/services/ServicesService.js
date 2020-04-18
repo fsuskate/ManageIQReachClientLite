@@ -30,6 +30,29 @@ class ServicesService {
       })
       .catch(error => console.log('error', error));
   }
+
+  static getService(token, serviceId, callback) {
+    var myHeaders = new Headers();
+    myHeaders.append("X-Auth-Token", token);
+
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow'
+    };
+
+    let url = "/api/services/" + serviceId
+
+    console.log("url: " + url)
+
+    fetch(url, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        console.log(result)
+        callback(result)
+      })
+      .catch(error => console.log('error', error));
+  }
 }
 
 export default ServicesService

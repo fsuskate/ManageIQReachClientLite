@@ -85,9 +85,20 @@ class Deployment extends React.Component {
       <div className="Deployment">
         <Form onSubmit={this.handleSubmit}>
           <h2>{template.name}</h2>
-          <h6>{template.id}</h6>
           <h6>{template.description}</h6>
-          <Form.Group controlId="formCpu">
+
+          <Form.Group controlId="formTemplate">
+          <Form.Label>Template</Form.Label>
+          <Form.Control as="select">
+            <option>Cent OS</option>
+            <option>Ubuntu</option>
+            <option>Windows Server 2016</option>
+            <option>Windows 10</option>
+            <option>Redhat</option>
+          </Form.Control>
+          </Form.Group>
+
+          <Form.Group controlId="formServiceName">
           <Form.Label>Name</Form.Label>
           <Form.Control             
             value={this.state.serviceName} 
