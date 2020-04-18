@@ -41,7 +41,7 @@ class ServicesService {
       redirect: 'follow'
     };
 
-    let url = "/api/services/" + serviceId
+    let url = "/api/services/" + serviceId + "?expand=vms"
 
     console.log("url: " + url)
 

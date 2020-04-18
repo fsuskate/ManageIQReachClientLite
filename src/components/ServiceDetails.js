@@ -54,7 +54,7 @@ class ServiceDetails extends React.Component {
               <table className="table table-sm"><tr><td width="20%">Owner:</td><td width="80%">{service.evm_owner_id}</td></tr></table>
               <table className="table table-sm"><tr><td width="20%">Created On:</td><td width="80%">{service.created_at}</td></tr></table>              
             </li>
-            <li className="list-group-item text-muted">
+            <li className="list-group-item">
               <table className="table table-sm text-muted"><tr><td width="20%">Ems Id:</td><td width="80%">{service.options.dialog.dialog_ems_dropdown}</td></tr></table>
               <table className="table table-sm text-muted"><tr><td width="20%">VM Name:</td><td width="80%">{service.options.dialog.dialog_vm_name}</td></tr></table>
               <table className="table table-sm text-muted"><tr><td width="20%">CPU:</td><td width="80%">{service.options.dialog.dialog_cpu_size}</td></tr></table>
@@ -64,6 +64,17 @@ class ServiceDetails extends React.Component {
               <table className="table table-sm text-muted"><tr><td width="20%">Quota Limits:</td><td width="80%">{service.options.dialog.dialog_quota_limits}</td></tr></table>
               <table className="table table-sm text-muted"><tr><td width="20%">Instance Type Id:</td><td width="80%">{service.options.dialog.dialog_instance_type}</td></tr></table>
               <table className="table table-sm text-muted"><tr><td width="20%">Price:</td><td width="80%">{service.options.dialog.dialog_total_price}</td></tr></table>
+            </li>
+            <li className="list-group-item">VMs:
+              <ul className="list-group">
+                  {
+                    service.vms.map((vm) => {
+                      return <li className="list-group-item" key={vm.guid}>
+                        <i className="fa fa-laptop"></i> {vm.name}                      
+                      </li>
+                    })
+                  }
+              </ul>
             </li>
           </ul>
         </div>
