@@ -6,7 +6,8 @@ import './App.css';
 
 const UserAuthContext = React.createContext({
   user: null,
-  basicAuthToken: null
+  basicAuthToken: null,
+  apiToken: null
 })
 
 class App extends React.Component {

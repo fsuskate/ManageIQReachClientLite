@@ -12,7 +12,6 @@ class Deployment extends React.Component {
     super(props);
     this.state = {
       template: null,
-      token: "",
       catalogId: "",
       templateId: "",
       serviceName: "",
@@ -32,15 +31,13 @@ class Deployment extends React.Component {
     event.preventDefault(); 
     
     if (window.confirm('Are you sure you wish to deploy this item?')) {
-      let authService = new AuthService()
-      authService.authenticate(UserAuthContext.Consumer.basicAuthToken, (data) => {
-        this.setState({ token: data.auth_token }, this.doProvision)
-      })        
+      this.doProvision()
     }
   }
 
-  doProvision() {
-    CatalogService.postProvisionTemplate(this.state, ()  => {
+  doProvision() {    
+    let apiToken = UserAuthContext.Consumer.apiToken
+    CatalogService.postProvisionTemplate(apiToken, this.state, ()  => {
       this.setState({redirectToHome: true})
     })
   }
@@ -56,16 +53,12 @@ class Deployment extends React.Component {
     this.setState({
       templateId: templateId,
       catalogId: catalogId
-      }, () => {
-      let authService = new AuthService()
-      authService.authenticate(UserAuthContext.Consumer.basicAuthToken, (data) => {
-        this.setState({ token: data.auth_token }, () => {
-          CatalogService.getCatalogTemplate(this.state.token, this.state.catalogId, this.state.templateId, (template) => {
-            this.setState({template: template})
-          })
-        })
+    }, () => {
+      let apiToken = UserAuthContext.Consumer.apiToken
+      CatalogService.getCatalogTemplate(apiToken, this.state.catalogId, this.state.templateId, (template) => {
+        this.setState({template: template})
       })
-    })   
+    })
   }
   
   render() {

@@ -1,6 +1,5 @@
 import React from "react"
 import "./Catalog.css"
-import AuthService from "../services/AuthService"
 import CatalogService from "../services/CatalogService"
 import { UserAuthContext } from '../App'
 import Loading from "./Loading"
@@ -12,7 +11,6 @@ class Catalog extends React.Component {
     this.state = {
       catalogs: "",
       templatesToCatalog: {},
-      token: "",
       loading: true      
     }
     this.doProvision = this.doProvision.bind(this)
@@ -20,26 +18,18 @@ class Catalog extends React.Component {
 
   componentDidMount() {
     console.log("componentDidMount")
-    let authService = new AuthService()
-    authService.authenticate(UserAuthContext.Consumer.basicAuthToken, (data) => {
-      this.setState({ token: data.auth_token }, this.doGetCatalogs)
-    })
+    this.doGetCatalogs()
   }
 
   doProvision(id) {
-    alert("Deploy " + id)
-    let authService = new AuthService()
-    authService.authenticate(UserAuthContext.Consumer.basicAuthToken, (data) => {
-      CatalogService.postProvisionTemplate(data.auth_token, ()  => {
-        this.setState({redirectToHome: true})
-      })
-    })    
+    CatalogService.postProvisionTemplate(UserAuthContext.Consumer.apiToken, ()  => {
+      this.setState({redirectToHome: true})
+    })
   }
 
   doGetCatalogs() {
-    console.log(this.state)
-    if (this.state.token) {
-      CatalogService.getCatalogs(this.state.token, (result) => {
+    if (UserAuthContext.Consumer.apiToken) {
+      CatalogService.getCatalogs(UserAuthContext.Consumer.apiToken, (result) => {
         console.log(result)
         this.setState({ catalogs: result.resources }, this.doGetCatalogTemplates)
       })
@@ -48,7 +38,8 @@ class Catalog extends React.Component {
 
   doGetCatalogTemplates() {
     this.state.catalogs.forEach((catalog) => {
-      CatalogService.getCatalogTemplates(this.state.token, catalog.id, (result) => {
+      let apiToken = UserAuthContext.Consumer.apiToken
+      CatalogService.getCatalogTemplates(apiToken, catalog.id, (result) => {
         console.log(result)
         var templatesToCatalog = this.state.templatesToCatalog
         templatesToCatalog[catalog.id] = []

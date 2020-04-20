@@ -62,9 +62,9 @@ class CatalogService {
         .catch(error => console.log('error', error));
     }
 
-    static postProvisionTemplate(props, callback) {
+    static postProvisionTemplate(token, props, callback) {
       var myHeaders = new Headers()
-      myHeaders.append("x-auth-token", props.token)
+      myHeaders.append("x-auth-token", token)
       myHeaders.append("Content-Type", "text/plain");
 
       var payload = {

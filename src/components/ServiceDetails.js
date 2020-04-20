@@ -1,6 +1,5 @@
 import React from 'react'
 import "./ServiceDetails.css"
-import AuthService from '../services/AuthService'
 import ServiceService from '../services/ServicesService'
 import Loading from './Loading'
 import { UserAuthContext } from '../App'
@@ -19,21 +18,15 @@ class ServiceDetails extends React.Component {
   }
 
   componentDidMount() {
-    console.log("componentDidMount")
-  
+    let apiToken = UserAuthContext.Consumer.apiToken
     let serviceId = this.props.location.search
     serviceId = serviceId.split("=").pop()
     this.setState({serviceId: serviceId}, () => {
-      let authService = new AuthService()
-      authService.authenticate(UserAuthContext.Consumer.basicAuthToken, (data) => {
-        this.setState({ token: data.auth_token }, () => {
-          ServiceService.getService(this.state.token, this.state.serviceId, (service) => {
-            this.setState({service: service})
-          })
-        })
+      ServiceService.getService(apiToken, this.state.serviceId, (service) => {
+        this.setState({service: service})
       })
     })
-  }
+  }      
   
   render() {
     const service = this.state.service

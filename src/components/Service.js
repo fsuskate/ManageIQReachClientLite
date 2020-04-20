@@ -16,22 +16,13 @@ class Service extends React.Component {
   }
 
   componentDidMount() {
-    console.log("componentDidMount")
-    // Call static function authenticate passing in a callback that sets the token and gets the catalogs
-    let authService = new AuthService()
-    authService.authenticate(UserAuthContext.Consumer.basicAuthToken, (data) => {
-      this.setState({token : data.auth_token}, () => { 
-        console.log(this.state)
-        if (this.state.token) {
-          let user = UserAuthContext.Consumer.user
-          ServicesService.getServices(this.state.token, user, (result) => {
-            this.setState( {resources: result.resources})
-          })
-        }
-      })
+    let user = UserAuthContext.Consumer.user
+    let apiToken = UserAuthContext.Consumer.apiToken
+    ServicesService.getServices(apiToken, user, (result) => {
+      this.setState( {resources: result.resources})
     })
   }
-
+      
   render() {    
     const {resources} = this.state;
     console.log(resources)
