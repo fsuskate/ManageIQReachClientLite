@@ -4,7 +4,7 @@ import "./Deployment.css"
 import { Redirect } from 'react-router'
 import CatalogService from "../services/CatalogService"
 import AuthService from "../services/AuthService"
-import Clock from "./Clock"
+import { UserAuthContext } from '../App'
 import Loading from './Loading'
 
 class Deployment extends React.Component {
@@ -33,7 +33,7 @@ class Deployment extends React.Component {
     
     if (window.confirm('Are you sure you wish to deploy this item?')) {
       let authService = new AuthService()
-      authService.authenticate((data) => {
+      authService.authenticate(UserAuthContext.Consumer.basicAuthToken, (data) => {
         this.setState({ token: data.auth_token }, this.doProvision)
       })        
     }
@@ -58,7 +58,7 @@ class Deployment extends React.Component {
       catalogId: catalogId
       }, () => {
       let authService = new AuthService()
-      authService.authenticate((data) => {
+      authService.authenticate(UserAuthContext.Consumer.basicAuthToken, (data) => {
         this.setState({ token: data.auth_token }, () => {
           CatalogService.getCatalogTemplate(this.state.token, this.state.catalogId, this.state.templateId, (template) => {
             this.setState({template: template})

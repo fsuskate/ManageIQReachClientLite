@@ -1,9 +1,10 @@
-import React from "react";
-import "./Catalog.css";
-import AuthService from "../services/AuthService";
-import CatalogService from "../services/CatalogService";
-import { Button } from 'react-bootstrap'
-import Loading from "./Loading";
+import React from "react"
+import "./Catalog.css"
+import AuthService from "../services/AuthService"
+import CatalogService from "../services/CatalogService"
+import { UserAuthContext } from '../App'
+import Loading from "./Loading"
+import { Button } from "react-bootstrap"
 
 class Catalog extends React.Component {
   constructor() {
@@ -20,7 +21,7 @@ class Catalog extends React.Component {
   componentDidMount() {
     console.log("componentDidMount")
     let authService = new AuthService()
-    authService.authenticate((data) => {
+    authService.authenticate(UserAuthContext.Consumer.basicAuthToken, (data) => {
       this.setState({ token: data.auth_token }, this.doGetCatalogs)
     })
   }
@@ -28,7 +29,7 @@ class Catalog extends React.Component {
   doProvision(id) {
     alert("Deploy " + id)
     let authService = new AuthService()
-    authService.authenticate((data) => {
+    authService.authenticate(UserAuthContext.Consumer.basicAuthToken, (data) => {
       CatalogService.postProvisionTemplate(data.auth_token, ()  => {
         this.setState({redirectToHome: true})
       })
@@ -77,7 +78,7 @@ class Catalog extends React.Component {
     console.log(catalogs)
     console.log(templatesToCatalog)
 
-    const renderedResourcesList = catalogs.map((catalog, index) => {
+    const renderedResourcesList = catalogs.map((catalog) => {
       return (
         <div className="card mx-auto" style={{ "margin": "8px" }} key={catalog.id}>
           <div className="card-header"><b>{catalog.name}</b></div>
@@ -88,9 +89,12 @@ class Catalog extends React.Component {
                   templatesToCatalog[catalog.id].map((template, index) => {
                     return <li className="list-group-item" key={template.guid}>
                       {template.name}
-                      <a role="button" className="btn btn-primary btn-sm float-right" href={`/deploy?catalogId=${catalog.id}&templateId=${template.id}`}>
-                        Deploy
-                      </a>
+                        <Button className="btn btn-primary btn-sm float-right" onClick={() => {
+                          this.props.history.push(`/deploy?catalogId=${catalog.id}&templateId=${template.id}`)}
+                        }>
+                      Details
+                    </Button>
+                      
                     </li>
                   })
                 }

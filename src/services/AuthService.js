@@ -1,15 +1,10 @@
-import { UserAuthContext } from '../App'
-
 class AuthService {
-
-  authenticate(callback) {
-    console.log(UserAuthContext.Provider)
+  authenticate(basicAuthToken, callback) {
     console.log("authenticate")
-    const authToken = UserAuthContext.Provider
     var myHeaders = new Headers();
     // Debug only, remove in release
-    myHeaders.append("Authorization", "Basic ZnM3MzA1MDY6RnJhbmNvaXMyMyE=");
-    //myHeaders.append("Authorization", authToken)
+    //myHeaders.append("Authorization", "Basic ZnM3MzA1MDY6RnJhbmNvaXMyMyE=");
+    myHeaders.append("Authorization", basicAuthToken)
 
     var requestOptions = {
       method: 'GET',

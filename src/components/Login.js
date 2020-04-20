@@ -1,5 +1,5 @@
 import React from 'react';
-import { UserAuthContext, UserIdContext } from '../App'
+import { UserAuthContext } from '../App'
 import { Form, Button } from 'react-bootstrap';
 import "./Login.css";
 import { Redirect } from 'react-router';
@@ -36,14 +36,14 @@ class Login extends React.Component {
     var auth = 'Basic ' + new Buffer(this.state.username + ':' + this.state.password).toString('base64');
 
     // Set the global basic auth string for use in the AuthService
-    UserAuthContext.Provider = auth
+    UserAuthContext.Consumer.basicAuthToken = auth
 
     // Authenticate
     let authService = new AuthService()
-    authService.authenticate((data) => {
+    authService.authenticate(UserAuthContext.Consumer.basicAuthToken, (data) => {
       UserService.getUsers(data.auth_token, this.state.username, (data) => {
         // Set the user id for use in services
-        UserIdContext.Provider = data.resources[0].id
+        UserAuthContext.Consumer.user = data.resources[0]
         this.setState({redirectToHome: true})
       })
     })

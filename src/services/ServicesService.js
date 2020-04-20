@@ -1,7 +1,5 @@
-import { UserIdContext } from '../App'
-
 class ServicesService {
-  static getServices(token, callback) {
+  static getServices(token, user, callback) {
     var myHeaders = new Headers();
     myHeaders.append("X-Auth-Token", token);
 
@@ -13,7 +11,7 @@ class ServicesService {
 
     let url = "/api/services?expand=resources"
 
-    let userId = UserIdContext.Provider
+    let userId = user.id
     if (userId && userId.length !== "undefined" && userId.length > 0) {
       url = url + "&filter[]=evm_owner_id=" + userId
     } else {

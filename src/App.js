@@ -4,25 +4,28 @@ import Navigation from './components/Navigation'
 import Routes from './Routes';
 import './App.css';
 
-const UserAuthContext = React.createContext(null)
-const UserIdContext = React.createContext(null)
+const UserAuthContext = React.createContext({
+  user: null,
+  basicAuthToken: null
+})
 
 class App extends React.Component {
   render() {
     return (
-      <Router>
-        <Navigation />
-        <div className="App Content">
-          <Routes />
-        </div>        
-      </Router>    
+      <UserAuthContext.Provider>
+        <Router>
+          <Navigation />
+          <div className="App Content">
+            <Routes />
+          </div>        
+        </Router>    
+      </UserAuthContext.Provider>
     );
   }
 }
 
 export { 
   App,
-  UserAuthContext,
-  UserIdContext
+  UserAuthContext
 }
 

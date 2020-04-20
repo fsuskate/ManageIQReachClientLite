@@ -1,8 +1,10 @@
-import React from "react";
-import "./Service.css";
-import Loading from "./Loading";
-import AuthService from "../services/AuthService";
-import ServicesService from "../services/ServicesService";
+import React from "react"
+import "./Service.css"
+import Loading from "./Loading"
+import AuthService from "../services/AuthService"
+import ServicesService from "../services/ServicesService"
+import { UserAuthContext } from "../App"
+import { Button } from 'react-bootstrap'
 
 class Service extends React.Component {
   constructor() {
@@ -17,11 +19,12 @@ class Service extends React.Component {
     console.log("componentDidMount")
     // Call static function authenticate passing in a callback that sets the token and gets the catalogs
     let authService = new AuthService()
-    authService.authenticate((data) => {
+    authService.authenticate(UserAuthContext.Consumer.basicAuthToken, (data) => {
       this.setState({token : data.auth_token}, () => { 
         console.log(this.state)
         if (this.state.token) {
-          ServicesService.getServices(this.state.token, (result) => {
+          let user = UserAuthContext.Consumer.user
+          ServicesService.getServices(this.state.token, user, (result) => {
             this.setState( {resources: result.resources})
           })
         }
@@ -39,15 +42,17 @@ class Service extends React.Component {
       );
     }
 
-    const renderedResourcesList = resources.map((resource, index) => {
+    const renderedResourcesList = resources.map((resource) => {
       return (
         <div className="card mx-auto" style={{"margin" : "8px"}} key={resource.id}>
         <div className="card-header"><b>{resource.name}</b></div>
         <div className="card-body">          
           <h6 className="card-subtitle mb-2 text-muted">Id: {resource.id}
-            <a role="button" className="btn btn-primary btn-sm float-right" href={`/service_details?serviceId=${resource.id}`}>
+            <Button className="btn btn-primary btn-sm float-right" onClick={() => {
+                this.props.history.push(`/service_details?serviceId=${resource.id}`)}
+              }>
               Details
-            </a>
+            </Button>
           </h6>  
           <h6 className="card-subtitle mb-2 text-muted">Description: {resource.description}</h6>  
           <h6 className="card-subtitle mb-2 text-muted">Service Template: {resource.service_template_id}</h6> 
