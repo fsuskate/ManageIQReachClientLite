@@ -7,7 +7,7 @@ class Loading extends React.Component {
     return (
       <div className="Loading">
         <div className="lander">
-          <div class="Loading">
+          <div className="Loading">
             <span>L</span>
             <span>O</span>
             <span>A</span>

@@ -5,6 +5,8 @@ import { Redirect } from 'react-router'
 import CatalogService from "../services/CatalogService"
 import { UserAuthContext } from '../App'
 import Loading from './Loading'
+import "./Collapsible.css"
+import Collapsible from 'react-collapsible';
 
 class Deployment extends React.Component {
   constructor(props) {
@@ -86,8 +88,8 @@ class Deployment extends React.Component {
       );
     }
 
-    var jsonText = `
-POST URL: 
+    var jsonText = 
+`POST URL: 
 "/api/service_catalogs/${this.state.catalogId}/service_templates/"
 
 POST BODY:
@@ -166,10 +168,14 @@ POST BODY:
       
           <Button variant="primary" type="submit" disabled={!this.validateForm()}>
             Deploy
-          </Button>          
-          <pre style={{color: "yellow"}}>{jsonText}</pre>
-        </Form>
-        
+          </Button>      
+
+          <Collapsible trigger="API Code">
+            <Form.Control as="textarea" rows="18" style={{color: "green", backgroundColor: "black", font: "1.0rem Inconsolata, monospace"}}>
+              {jsonText}
+            </Form.Control>
+          </Collapsible>            
+        </Form>        
       </div>
     );
   }
