@@ -62,21 +62,22 @@ class CatalogService {
         .catch(error => console.log('error', error));
     }
 
-    static postProvisionTemplate(token, props, callback) {
+    static postProvisionTemplate(token, params, callback) {
       var myHeaders = new Headers()
       myHeaders.append("x-auth-token", token)
       myHeaders.append("Content-Type", "text/plain");
 
+      let href_url = "/api/service_catalogs/" + params.catalogId + "/service_templates/" + params.serviceTemplateId
       var payload = {
         "action": "order",
         "resource": {
-          "href": "/api/service_catalogs/12000000000002/service_templates/12000000000011",
+          "href": href_url,
           "ems_dropdown": "12000000000015",
-          "template": "12000000000538",
-          "cpu_size": props.cpu,
-          "memory_size": props.memory,
-          "disk_size": props.disk,
-          "service_name": props.serviceName,
+          "template": params.imageTemplateId,
+          "cpu_size": params.cpu,
+          "memory_size": params.memory,
+          "disk_size": params.disk,
+          "service_name": params.serviceName,
           "vm_name": "renbdl",
           "instance_type": 12000000000401    
         }
@@ -89,7 +90,8 @@ class CatalogService {
         redirect: 'follow'
       };
 
-      fetch("/api/service_catalogs/12000000000002/service_templates/12000000000011", requestOptions)
+      let post_url = "/api/service_catalogs/" + params.catalogId + "/service_templates/"
+      fetch(post_url, requestOptions)
         .then(response => response.text())
         .then(result => {
           callback(result)
@@ -97,6 +99,29 @@ class CatalogService {
         .catch(error => {
           console.log('error', error)
         });
+    }
+
+    static getImageTemplates(token, callback) {
+      console.log("getImageTemplates")
+      var myHeaders = new Headers();
+      console.log(myHeaders)
+      myHeaders.append("X-Auth-Token", token);
+
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+      };
+
+      var url = "/api/templates?expand=resources&filter[]=template=true&filter[]=publicly_available=true"
+      
+      console.log(url)
+      fetch(url, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+          callback(result)
+        })
+        .catch(error => console.log('error', error));
     }
 }
 

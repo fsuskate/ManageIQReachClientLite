@@ -81,7 +81,7 @@ class Catalog extends React.Component {
                     return <li className="list-group-item" key={template.guid}>
                       {template.name}
                         <Button className="btn btn-primary btn-sm float-right" onClick={() => {
-                          this.props.history.push(`/deploy?catalogId=${catalog.id}&templateId=${template.id}`)}
+                          this.props.history.push(`/deploy?catalogId=${catalog.id}&serviceTemplateId=${template.id}`)}
                         }>
                       Details
                     </Button>

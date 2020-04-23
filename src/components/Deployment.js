@@ -3,7 +3,6 @@ import { Form, Button } from 'react-bootstrap'
 import "./Deployment.css"
 import { Redirect } from 'react-router'
 import CatalogService from "../services/CatalogService"
-import AuthService from "../services/AuthService"
 import { UserAuthContext } from '../App'
 import Loading from './Loading'
 
@@ -13,12 +12,15 @@ class Deployment extends React.Component {
     this.state = {
       template: null,
       catalogId: "",
-      templateId: "",
+      serviceTemplateId: "",
+      imageTemplateId: "",
       serviceName: "",
       cpu: "",
       memory: "",
       disk: "",
-      redirectToHome: false
+      redirectToHome: false,
+      imageTemplates: null,
+      apiToken: ""
     };       
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -47,16 +49,19 @@ class Deployment extends React.Component {
   
     let searchString = this.props.location.search
     let queryElements = searchString.split("=")
-    let templateId = queryElements.pop()
+    let serviceTemplateId = queryElements.pop()
     let catalogId = queryElements.pop()
     catalogId = catalogId.substring(0, catalogId.indexOf("&"));
     this.setState({
-      templateId: templateId,
+      serviceTemplateId: serviceTemplateId,
       catalogId: catalogId
     }, () => {
-      let apiToken = UserAuthContext.Consumer.apiToken
-      CatalogService.getCatalogTemplate(apiToken, this.state.catalogId, this.state.templateId, (template) => {
-        this.setState({template: template})
+      CatalogService.getCatalogTemplate(UserAuthContext.Consumer.apiToken, this.state.catalogId, this.state.serviceTemplateId, (template) => {
+        this.setState({template: template}, () => {
+          CatalogService.getImageTemplates(UserAuthContext.Consumer.apiToken, (imageTemplates) => {
+            this.setState({imageTemplates: imageTemplates})
+          })
+        })
       })
     })
   }
@@ -74,6 +79,29 @@ class Deployment extends React.Component {
       );
     }
 
+    const imageTemplates = this.state.imageTemplates
+    if (!imageTemplates || imageTemplates.count <= 0) {
+      return (
+        <Loading />
+      );
+    }
+
+    var jsonText = `
+POST URL: 
+"/api/service_catalogs/${this.state.catalogId}/service_templates/"
+
+POST BODY:
+{
+  "action" : "order",
+  "resource" : {
+    "template" : "${this.state.imageTemplateId}",
+    "cpu_size" : "${this.state.cpu}",
+    "memory_size" : "${this.state.memory}",
+    "disk_size" : "${this.state.disk}",
+    "service_name" : "${this.state.serviceName}"
+  }          
+}`
+
     return (
       <div className="Deployment">
         <Form onSubmit={this.handleSubmit}>
@@ -82,12 +110,17 @@ class Deployment extends React.Component {
 
           <Form.Group controlId="formTemplate">
           <Form.Label>Template</Form.Label>
-          <Form.Control as="select">
-            <option>Cent OS</option>
-            <option>Ubuntu</option>
-            <option>Windows Server 2016</option>
-            <option>Windows 10</option>
-            <option>Redhat</option>
+          <Form.Control as="select" onChange={
+            e => this.setState({imageTemplateId: e.target.value})
+          }> {
+            imageTemplates.resources.map((imageTemplate) => {
+              if (imageTemplate.name.indexOf("snapshot") === -1) {
+                return <option value={imageTemplate.id}>
+                  {imageTemplate.name}
+                </option> 
+              } 
+            })
+          }
           </Form.Control>
           </Form.Group>
 
@@ -134,7 +167,9 @@ class Deployment extends React.Component {
           <Button variant="primary" type="submit" disabled={!this.validateForm()}>
             Deploy
           </Button>          
+          <pre style={{color: "yellow"}}>{jsonText}</pre>
         </Form>
+        
       </div>
     );
   }
