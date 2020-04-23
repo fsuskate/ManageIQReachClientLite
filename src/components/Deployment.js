@@ -171,9 +171,9 @@ POST BODY:
           </Button>      
 
           <Collapsible trigger="API Code">
-            <Form.Control as="textarea" rows="18" style={{color: "green", backgroundColor: "black", font: "1.0rem Inconsolata, monospace"}}>
+            <pre style={{color: "green", backgroundColor: "black", font: "1.0rem Inconsolata, monospace"}}>
               {jsonText}
-            </Form.Control>
+            </pre>
           </Collapsible>            
         </Form>        
       </div>
