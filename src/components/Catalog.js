@@ -21,25 +21,29 @@ class Catalog extends React.Component {
     this.doGetCatalogs()
   }
 
+  getApiToken() {
+    if (!UserAuthContext.Consumer.apiToken) {
+      this.props.history.push("/login")
+    }
+    return UserAuthContext.Consumer.apiToken
+  }
+
   doProvision(id) {
-    CatalogService.postProvisionTemplate(UserAuthContext.Consumer.apiToken, ()  => {
+    CatalogService.postProvisionTemplate(this.getApiToken(), ()  => {
       this.setState({redirectToHome: true})
     })
   }
 
   doGetCatalogs() {
-    if (UserAuthContext.Consumer.apiToken) {
-      CatalogService.getCatalogs(UserAuthContext.Consumer.apiToken, (result) => {
-        console.log(result)
-        this.setState({ catalogs: result.resources }, this.doGetCatalogTemplates)
-      })
-    }
+    CatalogService.getCatalogs(this.getApiToken(), (result) => {
+      console.log(result)
+      this.setState({ catalogs: result.resources }, this.doGetCatalogTemplates)
+    })
   }
 
   doGetCatalogTemplates() {
     this.state.catalogs.forEach((catalog) => {
-      let apiToken = UserAuthContext.Consumer.apiToken
-      CatalogService.getCatalogTemplates(apiToken, catalog.id, (result) => {
+      CatalogService.getCatalogTemplates(this.getApiToken(), catalog.id, (result) => {
         console.log(result)
         var templatesToCatalog = this.state.templatesToCatalog
         templatesToCatalog[catalog.id] = []
