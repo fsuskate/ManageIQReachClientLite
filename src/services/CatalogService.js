@@ -1,5 +1,7 @@
+import FetchService from './FetchService'
+
 class CatalogService {
-    static getCatalogs(token, callback) {
+    static getCatalogs(token, history, callback) {
       var myHeaders = new Headers();
       myHeaders.append("X-Auth-Token", token);
       console.log(myHeaders)
@@ -10,15 +12,11 @@ class CatalogService {
         redirect: 'follow'
       };
 
-      fetch("/api/service_catalogs?expand=resources", requestOptions)
-        .then(response => response.json())
-        .then(result => {
-          callback(result)
-        })
-        .catch(error => console.log('error', error));
+      var url = "/api/service_catalogs?expand=resources"
+      FetchService.executeFetch(url, requestOptions, history, callback)
     }
     
-    static getCatalogTemplates(token, catalogId, callback) {
+    static getCatalogTemplates(token, catalogId, history, callback) {
       console.log("getCatalogTemplates for " + catalogId)
       var myHeaders = new Headers();
       console.log(myHeaders)
@@ -31,16 +29,10 @@ class CatalogService {
       };
 
       var url = "/api/service_catalogs/" + catalogId + "/service_templates?expand=resources"
-      console.log(url)
-      fetch(url, requestOptions)
-        .then(response => response.json())
-        .then(result => {
-          callback(result)
-        })
-        .catch(error => console.log('error', error));
+      FetchService.executeFetch(url, requestOptions, history, callback)
     }
 
-    static getCatalogTemplate(token, catalogId, templateId, callback) {
+    static getCatalogTemplate(token, catalogId, templateId, history, callback) {
       console.log("getCatalogTemplate for " + templateId)
       var myHeaders = new Headers();
       console.log(myHeaders)
@@ -53,16 +45,10 @@ class CatalogService {
       };
 
       var url = "/api/service_catalogs/" + catalogId + "/service_templates/" + templateId
-      console.log(url)
-      fetch(url, requestOptions)
-        .then(response => response.json())
-        .then(result => {
-          callback(result)
-        })
-        .catch(error => console.log('error', error));
+      FetchService.executeFetch(url, requestOptions, history, callback)
     }
 
-    static postProvisionTemplate(token, params, callback) {
+    static postProvisionTemplate(token, params, history, callback) {
       var myHeaders = new Headers()
       myHeaders.append("x-auth-token", token)
       myHeaders.append("Content-Type", "text/plain");
@@ -91,17 +77,10 @@ class CatalogService {
       };
 
       let post_url = "/api/service_catalogs/" + params.catalogId + "/service_templates/"
-      fetch(post_url, requestOptions)
-        .then(response => response.text())
-        .then(result => {
-          callback(result)
-        })
-        .catch(error => {
-          console.log('error', error)
-        });
+      FetchService.executeFetch(post_url, requestOptions, history, callback)
     }
 
-    static getImageTemplates(token, callback) {
+    static getImageTemplates(token, history, callback) {
       console.log("getImageTemplates")
       var myHeaders = new Headers();
       console.log(myHeaders)
@@ -113,15 +92,8 @@ class CatalogService {
         redirect: 'follow'
       };
 
-      var url = "/api/templates?expand=resources&filter[]=template=true&filter[]=publicly_available=true"
-      
-      console.log(url)
-      fetch(url, requestOptions)
-        .then(response => response.json())
-        .then(result => {
-          callback(result)
-        })
-        .catch(error => console.log('error', error));
+      var url = "/api/templates?expand=resources&filter[]=template=true&filter[]=publicly_available=true"      
+      FetchService.executeFetch(url, requestOptions, history, callback)
     }
 }
 

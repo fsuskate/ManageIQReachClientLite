@@ -1,7 +1,6 @@
 import React from "react"
 import "./Service.css"
 import Loading from "./Loading"
-import AuthService from "../services/AuthService"
 import ServicesService from "../services/ServicesService"
 import { UserAuthContext } from "../App"
 import { Button } from 'react-bootstrap'
@@ -18,7 +17,7 @@ class Service extends React.Component {
   componentDidMount() {
     let user = UserAuthContext.Consumer.user
     let apiToken = UserAuthContext.Consumer.apiToken
-    ServicesService.getServices(apiToken, user, (result) => {
+    ServicesService.getServices(apiToken, user, this.props.history, (result) => {
       this.setState( {resources: result.resources})
     })
   }

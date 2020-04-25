@@ -1,5 +1,7 @@
+import FetchService from './FetchService'
+
 class UserService {
-  static getUsers(token, username, callback) {
+  static getUsers(token, username, history, callback) {
     var myHeaders = new Headers();
     myHeaders.append("X-Auth-Token", token);
 
@@ -15,15 +17,7 @@ class UserService {
       url = url + "&filter[]=userid=" + username + "@broadcom.net"
     }
 
-    console.log("url: " + url)
-
-    fetch(url, requestOptions)
-      .then(response => response.json())
-      .then(result => {
-        console.log(result)
-        callback(result)
-      })
-      .catch(error => console.log('error', error));
+    FetchService.executeFetch(url, requestOptions, history, callback)
   }
 }
 

@@ -22,7 +22,10 @@ class ServiceDetails extends React.Component {
     let serviceId = this.props.location.search
     serviceId = serviceId.split("=").pop()
     this.setState({serviceId: serviceId}, () => {
-      ServiceService.getService(apiToken, this.state.serviceId, (service) => {
+      ServiceService.getService(apiToken, 
+        this.state.serviceId, 
+        this.props.history, 
+        (service) => {
         this.setState({service: service})
       })
     })

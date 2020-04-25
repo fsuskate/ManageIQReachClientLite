@@ -1,3 +1,5 @@
+import FetchService from './FetchService'
+
 class AuthService {
   authenticate(basicAuthToken, callback) {
     console.log("authenticate")
@@ -12,15 +14,8 @@ class AuthService {
       redirect: 'follow'
     };
 
-    fetch("/api/auth", requestOptions)
-      .then(response => response.json())
-      .then(result => {
-        console.log(result)
-        if (result) {
-          callback(result)
-        }
-      })
-      .catch(error => console.log('error', error));
+    var url = "/api/auth"
+    FetchService.executeFetch(url, requestOptions, null, callback)
   }
 }
 

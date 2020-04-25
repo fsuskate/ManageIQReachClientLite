@@ -1,5 +1,7 @@
+import FetchService from './FetchService'
+
 class ServicesService {
-  static getServices(token, user, callback) {
+  static getServices(token, user, history, callback) {
     var myHeaders = new Headers();
     myHeaders.append("X-Auth-Token", token);
 
@@ -14,22 +16,12 @@ class ServicesService {
     let userId = user.id
     if (userId && userId.length !== "undefined" && userId.length > 0) {
       url = url + "&filter[]=evm_owner_id=" + userId
-    } else {
-      url = url + "&filter[]=evm_owner_id=12000000000006" // Hardcode to me for now
-    }
-
-    console.log("url: " + url)
-
-    fetch(url, requestOptions)
-      .then(response => response.json())
-      .then(result => {
-        console.log(result)
-        callback(result)
-      })
-      .catch(error => console.log('error', error));
+    } 
+    
+    FetchService.executeFetch(url, requestOptions, history, callback)
   }
 
-  static getService(token, serviceId, callback) {
+  static getService(token, serviceId, history, callback) {
     var myHeaders = new Headers();
     myHeaders.append("X-Auth-Token", token);
 
@@ -40,16 +32,7 @@ class ServicesService {
     };
 
     let url = "/api/services/" + serviceId + "?expand=vms"
-
-    console.log("url: " + url)
-
-    fetch(url, requestOptions)
-      .then(response => response.json())
-      .then(result => {
-        console.log(result)
-        callback(result)
-      })
-      .catch(error => console.log('error', error));
+    FetchService.executeFetch(url, requestOptions, history, callback)
   }
 }
 

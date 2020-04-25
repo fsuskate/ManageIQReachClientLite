@@ -22,20 +22,17 @@ class Catalog extends React.Component {
   }
 
   getApiToken() {
-    if (!UserAuthContext.Consumer.apiToken) {
-      this.props.history.push("/login")
-    }
     return UserAuthContext.Consumer.apiToken
   }
 
   doProvision(id) {
-    CatalogService.postProvisionTemplate(this.getApiToken(), ()  => {
+    CatalogService.postProvisionTemplate(this.getApiToken(), this.props.history, ()  => {
       this.setState({redirectToHome: true})
     })
   }
 
   doGetCatalogs() {
-    CatalogService.getCatalogs(this.getApiToken(), (result) => {
+    CatalogService.getCatalogs(this.getApiToken(), this.props.history, (result) => {
       console.log(result)
       this.setState({ catalogs: result.resources }, this.doGetCatalogTemplates)
     })
@@ -43,7 +40,7 @@ class Catalog extends React.Component {
 
   doGetCatalogTemplates() {
     this.state.catalogs.forEach((catalog) => {
-      CatalogService.getCatalogTemplates(this.getApiToken(), catalog.id, (result) => {
+      CatalogService.getCatalogTemplates(this.getApiToken(), catalog.id, this.props.history, (result) => {
         console.log(result)
         var templatesToCatalog = this.state.templatesToCatalog
         templatesToCatalog[catalog.id] = []

@@ -43,7 +43,7 @@ class Login extends React.Component {
     authService.authenticate(UserAuthContext.Consumer.basicAuthToken, (data) => {
       UserAuthContext.Consumer.apiToken = data.auth_token
 
-      UserService.getUsers(UserAuthContext.Consumer.apiToken, this.state.username, (data) => {
+      UserService.getUsers(UserAuthContext.Consumer.apiToken, this.state.username, this.props.history, (data) => {
         // Set the user id for use in services
         UserAuthContext.Consumer.user = data.resources[0]
         this.setState({redirectToHome: true})

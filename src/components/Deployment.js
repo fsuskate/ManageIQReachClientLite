@@ -41,7 +41,7 @@ class Deployment extends React.Component {
 
   doProvision() {    
     let apiToken = UserAuthContext.Consumer.apiToken
-    CatalogService.postProvisionTemplate(apiToken, this.state, ()  => {
+    CatalogService.postProvisionTemplate(apiToken, this.state, this.props.history, ()  => {
       this.setState({redirectToHome: true})
     })
   }
@@ -58,9 +58,15 @@ class Deployment extends React.Component {
       serviceTemplateId: serviceTemplateId,
       catalogId: catalogId
     }, () => {
-      CatalogService.getCatalogTemplate(UserAuthContext.Consumer.apiToken, this.state.catalogId, this.state.serviceTemplateId, (template) => {
+      CatalogService.getCatalogTemplate(UserAuthContext.Consumer.apiToken, 
+        this.state.catalogId, 
+        this.state.serviceTemplateId, 
+        this.props.history, 
+        (template) => {
         this.setState({template: template}, () => {
-          CatalogService.getImageTemplates(UserAuthContext.Consumer.apiToken, (imageTemplates) => {
+          CatalogService.getImageTemplates(UserAuthContext.Consumer.apiToken, 
+            this.props.history, 
+            (imageTemplates) => {
             this.setState({imageTemplates: imageTemplates})
           })
         })
