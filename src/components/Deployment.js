@@ -177,7 +177,7 @@ POST BODY:
           </Button>      
 
           <Collapsible trigger="API Code">
-            <pre style={{color: "green", backgroundColor: "black", font: "1.0rem Inconsolata, monospace"}}>
+            <pre style={{color: "lightgreen", backgroundColor: "black", font: "1.0rem Inconsolata, monospace"}}>
               {jsonText}
             </pre>
           </Collapsible>            
