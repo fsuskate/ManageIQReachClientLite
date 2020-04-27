@@ -7,6 +7,7 @@ import Login from './components/Login'
 import NotFound from './components/NotFound'
 import Deployment from './components/Deployment'
 import ServiceDetails from './components/ServiceDetails'
+import VmDetails from './components/VmDetails';
 
 class Routes extends React.Component {
   render() {
@@ -17,6 +18,7 @@ class Routes extends React.Component {
         <Route path='/deploy' exact component={Deployment} />
         <Route path='/login' component={Login} />
         <Route path='/service_details' component={ServiceDetails} />
+        <Route path='/vm_details' component={VmDetails} />
         <Route path='/' component={Login} />
         <Route component={NotFound} />
       </Switch>
