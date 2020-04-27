@@ -16,7 +16,17 @@ class Service extends React.Component {
 
   componentDidMount() {
     let user = UserAuthContext.Consumer.user
+    if (!user) {
+      user = JSON.parse(localStorage.getItem("user"))
+      UserAuthContext.Consumer.user = user      
+    }
+    
     let apiToken = UserAuthContext.Consumer.apiToken
+    if (!apiToken) {
+      apiToken = localStorage.getItem("apiToken")
+      UserAuthContext.Consumer.apiToken = apiToken
+    }
+
     ServicesService.getServices(apiToken, user, this.props.history, (result) => {
       this.setState( {resources: result.resources})
     })

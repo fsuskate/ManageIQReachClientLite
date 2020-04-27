@@ -46,6 +46,8 @@ class Login extends React.Component {
       UserService.getUsers(UserAuthContext.Consumer.apiToken, this.state.username, this.props.history, (data) => {
         // Set the user id for use in services
         UserAuthContext.Consumer.user = data.resources[0]
+        localStorage.setItem("user", JSON.stringify(data.resources[0]))
+        localStorage.setItem("apiToken", UserAuthContext.Consumer.apiToken)
         this.setState({redirectToHome: true})
       })
     })
