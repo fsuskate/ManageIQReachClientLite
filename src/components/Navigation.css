@@ -1,6 +1,7 @@
 .Nav-header {
     background-color: #9c2c2c;
     min-height: 4vh;
+    height: 60px;
     display: flex;
     flex-direction: column;
     font-size: calc(10px + 1vmin);  
