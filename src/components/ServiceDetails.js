@@ -2,6 +2,7 @@ import React from 'react'
 import "./ServiceDetails.css"
 import ServiceService from '../services/ServicesService'
 import Loading from './Loading'
+import { Button } from "react-bootstrap"
 import { UserAuthContext } from '../App'
 
 class ServiceDetails extends React.Component {
@@ -47,7 +48,11 @@ class ServiceDetails extends React.Component {
             {
               service.vms.map((vm) => {
                 return <li className="list-group-item" key={vm.guid}>
-                  <i className="fa fa-laptop"></i> {vm.name}                      
+                  <Button className="btn btn-primary" onClick={() => {
+                    this.props.history.push(`/service_details?serviceId=${vm.id}`)}
+                  }>
+                  <i className="fa fa-laptop"></i> {vm.name}
+                </Button>                    
                 </li>
               })
             }
