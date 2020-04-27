@@ -2,7 +2,7 @@ import React from 'react'
 import "./ServiceDetails.css"
 import ServiceService from '../services/ServicesService'
 import Loading from './Loading'
-import { Button } from "react-bootstrap"
+import { Button, Breadcrumb } from "react-bootstrap"
 import { UserAuthContext } from '../App'
 
 class ServiceDetails extends React.Component {
@@ -49,7 +49,7 @@ class ServiceDetails extends React.Component {
               service.vms.map((vm) => {
                 return <li className="list-group-item" key={vm.guid}>
                   <Button className="btn btn-primary" onClick={() => {
-                    this.props.history.push(`/service_details?serviceId=${vm.id}`)}
+                    this.props.history.push(`/vm_details?serviceId=${service.id}&vmId=${vm.id}`)}
                   }>
                   <i className="fa fa-laptop"></i> {vm.name}
                 </Button>                    
@@ -77,6 +77,11 @@ class ServiceDetails extends React.Component {
 
     return (
       <div className="ServiceDetails">
+        <Breadcrumb>
+          <Breadcrumb.Item onClick={() => {
+            this.props.history.push(`/service`)}}>Services</Breadcrumb.Item>
+          <Breadcrumb.Item active>{service.id}</Breadcrumb.Item>
+        </Breadcrumb>
         <div className="card mx-auto" key={service.id}>
         <div className="card-header"><b>{service.name}</b></div>
         <div className="card-body">                    

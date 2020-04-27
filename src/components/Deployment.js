@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Button } from 'react-bootstrap'
+import { Form, Button, Breadcrumb } from 'react-bootstrap'
 import "./Deployment.css"
 import { Redirect } from 'react-router'
 import CatalogService from "../services/CatalogService"
@@ -112,6 +112,11 @@ POST BODY:
 
     return (
       <div className="Deployment">
+        <Breadcrumb>
+          <Breadcrumb.Item onClick={() => {
+            this.props.history.push(`/catalog`)}}>Catalogs</Breadcrumb.Item>
+          <Breadcrumb.Item active>{this.state.serviceTemplateId}</Breadcrumb.Item>
+        </Breadcrumb>
         <Form onSubmit={this.handleSubmit}>
           <h2>{template.name}</h2>
           <h6>{template.description}</h6>
