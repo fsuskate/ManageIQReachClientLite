@@ -217,6 +217,15 @@ class ServiceDetails extends React.Component {
       </li>      
     }
 
+    let networks
+    if (service.vms) {
+      networks = 
+      <table className="table table-sm"><tbody><tr><td width="20%">Networks:</td><td width="80%">
+        {service.vms.map((vm) => {return <p>{vm.cloud_network.name}</p>})}
+        </td></tr></tbody>
+      </table>
+    }
+
     let dialogOptions
     if (service.options  && service.options.dialog) {
       dialogOptions = <li className="list-group-item">
@@ -245,10 +254,7 @@ class ServiceDetails extends React.Component {
           <ul className="list-group">
             <li className="list-group-item">
               <table className="table table-sm"><tbody><tr><td width="20%">Description:</td><td width="80%">{service.description}</td></tr></tbody></table>                            
-              <table className="table table-sm"><tbody><tr><td width="20%">Networks:</td><td width="80%">
-                {service.vms.map((vm) => {return <p>{vm.cloud_network.name}</p>})}
-                </td></tr></tbody>
-              </table>
+              {networks}
             </li>
             {vms}            
             <li className="list-group-item">
