@@ -31,7 +31,7 @@ class ServicesService {
       redirect: 'follow'
     };
 
-    let url = "/api/services/" + serviceId + "?expand=vms"
+    let url = "/api/services/" + serviceId + "?expand=vms&attributes=custom_attributes,vms.cloud_network,vms.flavor,vms.ipaddresses,vms.disks,vms.custom_attributes,vms.operating_system"
     FetchService.executeFetch(url, requestOptions, history, callback)
   }
 
@@ -45,7 +45,7 @@ class ServicesService {
       redirect: 'follow'
     };
 
-    let url = "/api/services/" + serviceId + "/vms/" + vmId
+    let url = "/api/services/" + serviceId + "/vms/" + vmId + "?attributes=flavor,ipaddresses,disks,custom_attributes,operating_system"
     FetchService.executeFetch(url, requestOptions, history, callback)
   }
 }
