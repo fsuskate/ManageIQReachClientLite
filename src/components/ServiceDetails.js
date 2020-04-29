@@ -5,9 +5,20 @@ import Loading from './Loading'
 import { Button, Breadcrumb } from "react-bootstrap"
 import { UserAuthContext } from '../App'
 
+const laptopChar = '\uF109';
+const networkChar = '\uF233';  
+const fontServerName = "14px Verdana";
+const fontAwesomeWidth = 100;
+const fontAwesomeHeight = 100;     
+const fontAwesomeName = fontAwesomeWidth + 'px FontAwesome';      
+const color = "lightgreen";
+const lineWidth = 6;
+const bottomOffsetY = 30;    
+
 class ServiceDetails extends React.Component {
   constructor(props) {
     super(props);
+    this.canvasRef = React.createRef();
     this.state = {
       cpu: "",
       memory: "",
@@ -18,7 +29,114 @@ class ServiceDetails extends React.Component {
     };
   }
 
+  /*
+  * Waits for FontAwesome to be loaded
+  */
+  fontAwesomeOnload(callback, failAfterMS){
+    var canvas = document.createElement("canvas");
+    var ctx = canvas.getContext("2d");
+    var ccw, cch;
+    var fontsize=36;
+    var testCharacter='\uF047';
+    ccw = canvas.width = fontsize * 1.5;
+    cch = canvas.height = fontsize * 1.5;
+    ctx.font = fontsize + 'px FontAwesome';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    var startCount = countPix();
+    var t1 = performance.now();
+    var timeout = t1 + failAfterMS;
+    
+    requestAnimationFrame(fontOnload);
+    
+    function fontOnload(time) {
+      var currentCount = countPix();
+      if(time > timeout) {
+          
+      } else if (currentCount === startCount){
+          requestAnimationFrame(fontOnload);
+      } else {
+          callback();
+      }
+    }
+    
+    function countPix() {
+      ctx.clearRect(0, 0, ccw, cch);
+      ctx.fillText(testCharacter, ccw/2, cch/2);
+      var data = ctx.getImageData(0, 0, ccw, cch).data;
+      var count = 0;
+      for (var i = 3; i < data.length; i += 4){
+          if (data[i] > 10) { 
+              count++;
+          }
+      }
+      return(count);
+    }
+  }
+
+  drawLaptop(ctx, laptopName, laptopX, laptopY, networkX, networkY) {
+    ctx.fillStyle = color;
+    ctx.font = fontAwesomeName;  
+    ctx.fillText(laptopChar, laptopX, laptopY);      
+    
+    ctx.fillStyle = color;
+    ctx.font = fontServerName;    
+    ctx.fillText(laptopName, laptopX, laptopY+bottomOffsetY);  
+  }
+
+  drawNetwork(ctx, networkName, laptopX, laptopY, networkX, networkY) {
+    ctx.fillStyle = color;
+    ctx.font = fontAwesomeName;  
+    ctx.fillText(networkChar, networkX, networkY); 
+
+    ctx.fillStyle = color;
+    ctx.font = fontServerName;    
+    ctx.fillText(networkName, networkX, networkY-fontAwesomeHeight);  
+  }
+
+  drawNetworkConnection(ctx, laptopX, laptopY, networkX, networkY) {
+    var connectionX = networkX+fontAwesomeWidth/2;
+    var connectionY = networkY+fontAwesomeHeight/2;
+    
+    ctx.beginPath();
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
+    ctx.moveTo(connectionX, networkY);
+    ctx.lineTo(connectionX, connectionY);
+    ctx.lineTo(laptopX+fontAwesomeWidth/2, connectionY);
+    ctx.lineTo(laptopX+fontAwesomeWidth/2, laptopY-fontAwesomeHeight/1.5);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = lineWidth;
+    ctx.stroke();        
+  }
+
+  drawNetworkDiagram() {
+    const canvas = this.canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    var networkX = 20;
+    var networkY = fontAwesomeHeight + 30;
+    var laptopX = networkX+fontAwesomeWidth;
+    var laptopY = networkY+fontAwesomeHeight*1.75;
+    var gutter = fontAwesomeWidth/2;
+    
+    this.drawNetwork(ctx, "Network 0", laptopX, laptopY, networkX, networkY)
+    
+    for (var i = 0; i <= 4; i++) {
+        var laptopName = "Laptop " + i;
+        this.drawLaptop(ctx, laptopName, laptopX, laptopY, networkX, networkY);
+        this.drawNetworkConnection(ctx, laptopX, laptopY, networkX, networkY)        
+        laptopX += fontAwesomeWidth+gutter;
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.canvasRef.current) {
+      this.drawNetworkDiagram()
+    }
+  }
+
   componentDidMount() {
+    console.log("componentDidMount")
     let apiToken = UserAuthContext.Consumer.apiToken
     let serviceId = this.props.location.search
     serviceId = serviceId.split("=").pop()
@@ -38,8 +156,9 @@ class ServiceDetails extends React.Component {
       return (
         <Loading />
       );
-    }
+    }    
 
+    console.log("render after loading")
     let vms
     if (service.vms) {
       vms = 
@@ -57,7 +176,14 @@ class ServiceDetails extends React.Component {
               })
             }
         </ul>
-      </li>
+        <ul className="list-group">
+          <li className="list-group-item">
+            <div>
+              <canvas ref={this.canvasRef} style={{backgroundColor: "black"}} width={680} height={400}></canvas>
+            </div>
+          </li>
+        </ul>
+      </li>      
     }
 
     let dialogOptions
