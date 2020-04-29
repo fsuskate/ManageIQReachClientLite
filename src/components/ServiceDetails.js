@@ -137,6 +137,10 @@ class ServiceDetails extends React.Component {
 
   componentDidMount() {
     console.log("componentDidMount")
+    this.fontAwesomeOnload(() => {
+      console.log("fonts loaded")
+    }, 2000)
+    
     let apiToken = UserAuthContext.Consumer.apiToken
     let serviceId = this.props.location.search
     serviceId = serviceId.split("=").pop()
@@ -179,7 +183,7 @@ class ServiceDetails extends React.Component {
         <ul className="list-group">
           <li className="list-group-item">
             <div>
-              <canvas ref={this.canvasRef} style={{backgroundColor: "black"}} width={680} height={400}></canvas>
+              <canvas ref={this.canvasRef} style={{backgroundColor: "black", fontFamily:"fontawesome"}} width={680} height={400}></canvas>
             </div>
           </li>
         </ul>
