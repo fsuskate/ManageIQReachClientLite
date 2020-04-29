@@ -12,6 +12,8 @@ const fontAwesomeWidth = 100;
 const fontAwesomeHeight = 100;     
 const fontAwesomeName = fontAwesomeWidth + 'px FontAwesome';      
 const color = "lightgreen";
+const laptopColor = "lightgrey";
+const networkColor = "lightgrey";
 const lineWidth = 6;
 const bottomOffsetY = 30;    
 
@@ -75,21 +77,21 @@ class ServiceDetails extends React.Component {
   }
 
   drawLaptop(ctx, laptopName, laptopX, laptopY, networkX, networkY) {
-    ctx.fillStyle = color;
+    ctx.fillStyle = laptopColor;
     ctx.font = fontAwesomeName;  
     ctx.fillText(laptopChar, laptopX, laptopY);      
     
-    ctx.fillStyle = color;
+    ctx.fillStyle = laptopColor;
     ctx.font = fontServerName;    
     ctx.fillText(laptopName, laptopX, laptopY+bottomOffsetY);  
   }
 
   drawNetwork(ctx, networkName, laptopX, laptopY, networkX, networkY) {
-    ctx.fillStyle = color;
+    ctx.fillStyle = networkColor;
     ctx.font = fontAwesomeName;  
     ctx.fillText(networkChar, networkX, networkY); 
 
-    ctx.fillStyle = color;
+    ctx.fillStyle = networkColor;
     ctx.font = fontServerName;    
     ctx.fillText(networkName, networkX, networkY-fontAwesomeHeight);  
   }
@@ -119,11 +121,12 @@ class ServiceDetails extends React.Component {
     var laptopY = networkY+fontAwesomeHeight*1.75;
     var gutter = fontAwesomeWidth/2;
     
-    this.drawNetwork(ctx, "Network 0", laptopX, laptopY, networkX, networkY)
-    
-    for (var i = 0; i <= 4; i++) {
-        var laptopName = "Laptop " + i;
-        this.drawLaptop(ctx, laptopName, laptopX, laptopY, networkX, networkY);
+    for (var i = 0; i < this.state.service.vms.length; i++) {
+        var vm = this.state.service.vms[i]
+        var network = vm.cloud_network
+        
+        this.drawNetwork(ctx, network.name, laptopX, laptopY, networkX, networkY)
+        this.drawLaptop(ctx, vm.name, laptopX, laptopY, networkX, networkY);
         this.drawNetworkConnection(ctx, laptopX, laptopY, networkX, networkY)        
         laptopX += fontAwesomeWidth+gutter;
     }
@@ -140,7 +143,7 @@ class ServiceDetails extends React.Component {
     this.fontAwesomeOnload(() => {
       console.log("fonts loaded")
     }, 2000)
-    
+
     let apiToken = UserAuthContext.Consumer.apiToken
     let serviceId = this.props.location.search
     serviceId = serviceId.split("=").pop()
@@ -182,8 +185,8 @@ class ServiceDetails extends React.Component {
         </ul>
         <ul className="list-group">
           <li className="list-group-item">
-            <div>
-              <canvas ref={this.canvasRef} style={{backgroundColor: "black", fontFamily:"fontawesome"}} width={680} height={400}></canvas>
+            <div style={{maxHeight: "680", maxWidth: "350", overflow: "scroll"}}>
+              <canvas ref={this.canvasRef} style={{}} width={680} height={350}></canvas>
             </div>
           </li>
         </ul>
@@ -217,13 +220,22 @@ class ServiceDetails extends React.Component {
         <div className="card-body">                    
           <ul className="list-group">
             <li className="list-group-item">
-              <table className="table table-sm"><tbody><tr><td width="20%">Description:</td><td width="80%">{service.description}</td></tr></tbody></table>
+              <table className="table table-sm"><tbody><tr><td width="20%">Description:</td><td width="80%">{service.description}</td></tr></tbody></table>                            
+              <table className="table table-sm"><tbody><tr><td width="20%">Networks:</td><td width="80%">
+                {service.vms.map((vm) => {return <p>{vm.cloud_network.name}</p>})}
+                </td></tr></tbody>
+              </table>
+            </li>
+            {vms}            
+            <li className="list-group-item">
               <table className="table table-sm"><tbody><tr><td width="20%">Service Template:</td><td width="80%">{service.service_template_id}</td></tr></tbody></table>
               <table className="table table-sm"><tbody><tr><td width="20%">Owner:</td><td width="80%">{service.evm_owner_id}</td></tr></tbody></table>
               <table className="table table-sm"><tbody><tr><td width="20%">Created On:</td><td width="80%">{service.created_at}</td></tr></tbody></table>
+              <table className="table table-sm"><tbody><tr><td width="20%">Custom Attributes:</td><td width="80%">
+                {service.custom_attributes.map((attr) => {return <p>{attr.name + " : " + attr.value}</p>})}
+                </td></tr></tbody>
+              </table>
             </li>
-            {vms}
-            {dialogOptions}
           </ul>
         </div>
         </div>
