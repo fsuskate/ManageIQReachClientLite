@@ -53,19 +53,14 @@ class CatalogService {
       myHeaders.append("x-auth-token", token)
       myHeaders.append("Content-Type", "text/plain");
 
-      let href_url = "/api/service_catalogs/" + params.catalogId + "/service_templates/" + params.serviceTemplateId
       var payload = {
         "action": "order",
         "resource": {
-          "href": href_url,
-          "ems_dropdown": "12000000000015",
           "template": params.imageTemplateId,
           "cpu_size": params.cpu,
           "memory_size": params.memory,
           "disk_size": params.disk,
-          "service_name": params.serviceName,
-          "vm_name": "renbdl",
-          "instance_type": 12000000000401    
+          "service_name": params.serviceName          
         }
       }
 
@@ -76,7 +71,7 @@ class CatalogService {
         redirect: 'follow'
       };
 
-      let post_url = "/api/service_catalogs/" + params.catalogId + "/service_templates/"
+      let post_url = "/api/service_catalogs/" + params.catalogId + "/service_templates/" + params.serviceTemplateId
       FetchService.executeFetch(post_url, requestOptions, history, callback)
     }
 
