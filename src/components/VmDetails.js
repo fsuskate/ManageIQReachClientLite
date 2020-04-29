@@ -65,6 +65,10 @@ class VmDetails extends React.Component {
             <li className="list-group-item">
               <table className="table table-sm"><tbody><tr><td width="20%">Description:</td><td width="80%">{vm.description}</td></tr></tbody></table>
               <table className="table table-sm"><tbody><tr><td width="20%">Vendor:</td><td width="80%">{vm.vendor}</td></tr></tbody></table>
+              <table className="table table-sm"><tbody><tr><td width="20%">IpAddresses:</td><td width="80%">
+                {vm.ipaddresses.map((ip) => {return <li>{ip}</li>})}
+                </td></tr></tbody>
+              </table>
               <table className="table table-sm"><tbody><tr><td width="20%">Created On:</td><td width="80%">{vm.created_on}</td></tr></tbody></table>
               <table className="table table-sm"><tbody><tr><td width="20%">Actions:</td><td width="80%">
                 <Dropdown>
