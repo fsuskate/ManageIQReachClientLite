@@ -7,15 +7,17 @@ import { UserAuthContext } from '../App'
 
 const laptopChar = '\uF109';
 const networkChar = '\uF233';  
-const fontServerName = "14px Verdana";
+const fontServerNameHeight = 14
+const fontServerName = fontServerNameHeight+"px Verdana";
 const fontAwesomeWidth = 100;
 const fontAwesomeHeight = 100;     
 const fontAwesomeName = fontAwesomeWidth + 'px FontAwesome';      
-const color = "lightgreen";
+const color = "#375a7f";
 const laptopColor = "lightgrey";
 const networkColor = "lightgrey";
 const lineWidth = 6;
 const bottomOffsetY = 30;    
+const gutter = fontAwesomeWidth/2;    
 
 class ServiceDetails extends React.Component {
   constructor(props) {
@@ -38,7 +40,7 @@ class ServiceDetails extends React.Component {
     var canvas = document.createElement("canvas");
     var ctx = canvas.getContext("2d");
     var ccw, cch;
-    var fontsize=36;
+    var fontsize = 36;
     var testCharacter='\uF047';
     ccw = canvas.width = fontsize * 1.5;
     cch = canvas.height = fontsize * 1.5;
@@ -86,14 +88,30 @@ class ServiceDetails extends React.Component {
     ctx.fillText(laptopName, laptopX, laptopY+bottomOffsetY);  
   }
 
-  drawNetwork(ctx, networkName, laptopX, laptopY, networkX, networkY) {
+  drawNetwork(ctx, networkName, networkX, networkY) {
     ctx.fillStyle = networkColor;
     ctx.font = fontAwesomeName;  
     ctx.fillText(networkChar, networkX, networkY); 
 
     ctx.fillStyle = networkColor;
     ctx.font = fontServerName;    
-    ctx.fillText(networkName, networkX, networkY-fontAwesomeHeight);  
+    
+    var line = ""
+    // Wrap network name
+    for(var n = 0; n < networkName.length; n++) {
+      var testLine = line + networkName[n];
+      var metrics = ctx.measureText(testLine);
+      var testWidth = metrics.width;
+      if (testWidth > fontAwesomeWidth+gutter && n > 0) {
+        ctx.fillText(line, networkX, networkY-fontAwesomeHeight);
+        line = networkName[n];
+        networkY += fontServerNameHeight;
+      }
+      else {
+        line = testLine;
+      }      
+    }  
+    ctx.fillText(line, networkX, networkY-fontAwesomeHeight);     
   }
 
   drawNetworkConnection(ctx, laptopX, laptopY, networkX, networkY) {
@@ -119,13 +137,19 @@ class ServiceDetails extends React.Component {
     var networkY = fontAwesomeHeight + 30;
     var laptopX = networkX+fontAwesomeWidth;
     var laptopY = networkY+fontAwesomeHeight*1.75;
-    var gutter = fontAwesomeWidth/2;
-    
+    var networkWorkDict = {};
+
     for (var i = 0; i < this.state.service.vms.length; i++) {
         var vm = this.state.service.vms[i]
         var network = vm.cloud_network
-        
-        this.drawNetwork(ctx, network.name, laptopX, laptopY, networkX, networkY)
+
+        var networkIndex = Object.keys(networkWorkDict).length
+        if (!networkWorkDict[network.name]) {
+          networkWorkDict[network.name] = networkIndex          
+        }
+                
+        networkX = networkX+(networkIndex*(fontAwesomeWidth+gutter))
+        this.drawNetwork(ctx, network.name, networkX, networkY)
         this.drawLaptop(ctx, vm.name, laptopX, laptopY, networkX, networkY);
         this.drawNetworkConnection(ctx, laptopX, laptopY, networkX, networkY)        
         laptopX += fontAwesomeWidth+gutter;
