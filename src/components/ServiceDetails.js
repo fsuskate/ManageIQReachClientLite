@@ -143,11 +143,13 @@ class ServiceDetails extends React.Component {
         var vm = this.state.service.vms[i]
         var network = vm.cloud_network
 
-        var networkIndex = Object.keys(networkWorkDict).length
-        if (!networkWorkDict[network.name]) {
-          networkWorkDict[network.name] = networkIndex          
+        var nextNetworkIndex = Object.keys(networkWorkDict).length
+        if (networkWorkDict[network.name] === undefined) {
+          networkWorkDict[network.name] = nextNetworkIndex          
         }
-                
+        
+        var networkIndex = networkWorkDict[network.name]
+        
         networkX = networkX+(networkIndex*(fontAwesomeWidth+gutter))
         this.drawNetwork(ctx, network.name, networkX, networkY)
         this.drawLaptop(ctx, vm.name, laptopX, laptopY, networkX, networkY);
