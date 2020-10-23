@@ -14,7 +14,7 @@ class UserService {
     let url = "/api/users?expand=resources"
 
     if (username) {
-      url = url + "&filter[]=userid=" + username + "@broadcom.net"
+      url = url + "&filter[]=userid=" + username
     }
 
     FetchService.executeFetch(url, requestOptions, history, callback)

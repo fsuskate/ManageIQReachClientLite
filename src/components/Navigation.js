@@ -9,8 +9,8 @@ class Navigation extends React.Component {
       <Navbar variant="dark" className="Nav-header" fixed="top">
         <LinkContainer to="./login">
           <Navbar.Brand>
-            <img src="logo.jpg" width='30' className="d-inline-block align-top" alt=""></img>     
-            Broadcom Cloud Portal
+            <img src="logo.jpg" width='30' className="d-inline-block align-top" alt=""></img>
+            ManageIQ Lite Client
           </Navbar.Brand>
         </LinkContainer>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
@@ -18,19 +18,19 @@ class Navigation extends React.Component {
           <Nav className="mr-auto">
             <Nav>
               <LinkContainer to="/service">
-                  <Nav.Link>MY SERVICES</Nav.Link>      
-              </LinkContainer>                            
+                  <Nav.Link>MY SERVICES</Nav.Link>
+              </LinkContainer>
               <LinkContainer to="/catalog">
-                  <Nav.Link>CATALOG</Nav.Link>      
-              </LinkContainer>              
-            </Nav>                    
+                  <Nav.Link>CATALOG</Nav.Link>
+              </LinkContainer>
+            </Nav>
           </Nav>
           <Nav floatRight="true">
             <LinkContainer to="/login">
-              <Nav.Link>LOGIN</Nav.Link>                              
+              <Nav.Link>LOGIN</Nav.Link>
             </LinkContainer>
           </Nav>
-        </Navbar.Collapse>   
+        </Navbar.Collapse>
       </Navbar>
     )
   }
